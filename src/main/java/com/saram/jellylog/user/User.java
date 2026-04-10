@@ -1,4 +1,4 @@
-package com.saram.jellylog.login;
+package com.saram.jellylog.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @NoArgsConstructor
-@Entity(name = "user")
+@Entity
+@Table(name="user_table")
 public class User {
 
     // 사용자 고유 번호
@@ -18,7 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userCode;
 
-    // 사용자 닉네임
+    // 사용자 닉네임 (별명)
     @Column(nullable = false, length = 50)
     private String userName;
 
@@ -30,17 +31,21 @@ public class User {
     @Column(nullable = false, length = 20)
     private String userAuthProvider;
 
-    // OAuth 사용자 ID (유니크)
+    // OAuth 사용자 ID
     @Column(nullable = false, unique = true, columnDefinition = "TEXT")
     private String userAuthProviderId;
 
-    // 알림 허용 여부 (0 or 1)
-    @Column(nullable = false)
-    private Integer userNotificationEnabled = 1;
+    // 알림 허용 여부 (0: false / 1: true)
+    @Column(columnDefinition = "TINYINT(1)")
+    private Boolean userNotificationEnabled = true;
 
-    // 소리 허용 여부 (0 or 1)
-    @Column(nullable = false)
-    private Integer userSoundEnabled = 1;
+    // 소리 허용 여부 (0: false / 1: true)
+    @Column(columnDefinition = "TINYINT(1)")
+    private Boolean userSoundEnabled = true;
+
+    // 이메일 발송 허용 여부 (0: false / 1: true)
+    @Column(columnDefinition = "TINYINT(1)")
+    private Boolean userEmailEnabled = true;
 
     // 생성일
     @Column(nullable = false, updatable = false)
