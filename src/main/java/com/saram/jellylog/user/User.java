@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
+
 import java.time.LocalDateTime;
 
 @Setter
@@ -21,30 +23,36 @@ public class User {
 
     // 사용자 닉네임 (별명)
     @Column(nullable = false, length = 50)
-    private String userName;
+    @ColumnDefault("사용자님")
+    private String userName = "사용자님";
 
     // 사용자 보유 포인트
     @Column(nullable = false)
+    @ColumnDefault("0")
     private Integer userPoints = 0;
 
     // OAuth 제공자
-    @Column(nullable = false, length = 20)
-    private String userAuthProvider;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AuthProvider userAuthProvider = AuthProvider.GOOGLE;
 
     // OAuth 사용자 ID
     @Column(nullable = false, unique = true, columnDefinition = "TEXT")
     private String userAuthProviderId;
 
     // 알림 허용 여부 (0: false / 1: true)
-    @Column(columnDefinition = "TINYINT(1)")
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    @ColumnDefault("1")
     private Boolean userNotificationEnabled = true;
 
     // 소리 허용 여부 (0: false / 1: true)
-    @Column(columnDefinition = "TINYINT(1)")
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    @ColumnDefault("1")
     private Boolean userSoundEnabled = true;
 
     // 이메일 발송 허용 여부 (0: false / 1: true)
-    @Column(columnDefinition = "TINYINT(1)")
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    @ColumnDefault("1")
     private Boolean userEmailEnabled = true;
 
     // 생성일

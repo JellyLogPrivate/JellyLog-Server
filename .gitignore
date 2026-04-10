@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### macOS 관련 숨김 파일 무시 ###
+.DS_Store
