@@ -31,6 +31,33 @@ public class UserPet {
     public UserPet() {
     }
 
+    public UserPet(
+        UserPetId id,
+        Integer userPetLevel,
+        Long userPetExp,
+        String userPetEmotion,
+        LocalDateTime userPetCreatedAt,
+        LocalDateTime userPetUpdatedAt
+    ) {
+        this.id = id;
+        this.userPetLevel = userPetLevel;
+        this.userPetExp = userPetExp;
+        this.userPetEmotion = userPetEmotion;
+        this.userPetCreatedAt = userPetCreatedAt;
+        this.userPetUpdatedAt = userPetUpdatedAt;
+    }
+
+    public static UserPet create(UserPetId id, Integer level, Long exp, String emotion) {
+        return new UserPet(id, level, exp, emotion, LocalDateTime.now(), null);
+    }
+
+    public void updateStatus(Integer level, Long exp, String emotion) {
+        this.userPetLevel = level;
+        this.userPetExp = exp;
+        this.userPetEmotion = emotion;
+        this.userPetUpdatedAt = LocalDateTime.now();
+    }
+
     public UserPetId getId() {
         return id;
     }
@@ -79,4 +106,3 @@ public class UserPet {
         this.userPetUpdatedAt = userPetUpdatedAt;
     }
 }
-
