@@ -1,4 +1,4 @@
-package com.saram.jellylog.domain.furniture.dto.response;
+package com.saram.jellylog.furniture.dto.response;
 
 public record FurnitureResponse(
     Long furnitureCode,
@@ -11,4 +11,3 @@ public record FurnitureResponse(
     Integer furnitureDepthIndex
 ) {
 }
-

@@ -1,4 +1,4 @@
-package com.saram.jellylog.domain.pet.entity;
+package com.saram.jellylog.pet.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

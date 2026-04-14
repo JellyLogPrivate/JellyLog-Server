@@ -1,9 +1,9 @@
-package com.saram.jellylog.domain.pet.controller;
+package com.saram.jellylog.pet.controller;
 
-import com.saram.jellylog.domain.pet.dto.request.UserPetCreateRequest;
-import com.saram.jellylog.domain.pet.dto.request.UserPetUpdateRequest;
-import com.saram.jellylog.domain.pet.dto.response.UserPetResponse;
-import com.saram.jellylog.domain.pet.service.PetService;
+import com.saram.jellylog.pet.dto.request.UserPetCreateRequest;
+import com.saram.jellylog.pet.dto.request.UserPetUpdateRequest;
+import com.saram.jellylog.pet.dto.response.UserPetResponse;
+import com.saram.jellylog.pet.service.PetService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

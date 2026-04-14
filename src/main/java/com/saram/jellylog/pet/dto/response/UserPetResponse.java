@@ -1,6 +1,6 @@
-package com.saram.jellylog.domain.pet.dto.response;
+package com.saram.jellylog.pet.dto.response;
 
-import com.saram.jellylog.domain.pet.entity.UserPet;
+import com.saram.jellylog.pet.entity.UserPet;
 import java.time.LocalDateTime;
 
 public record UserPetResponse(

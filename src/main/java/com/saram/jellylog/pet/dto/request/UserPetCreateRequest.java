@@ -1,4 +1,4 @@
-package com.saram.jellylog.domain.pet.dto.request;
+package com.saram.jellylog.pet.dto.request;
 
 public record UserPetCreateRequest(
     Long userCode,

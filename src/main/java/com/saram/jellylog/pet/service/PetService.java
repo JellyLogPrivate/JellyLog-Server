@@ -1,13 +1,13 @@
-package com.saram.jellylog.domain.pet.service;
+package com.saram.jellylog.pet.service;
 
-import com.saram.jellylog.domain.pet.dto.request.UserPetCreateRequest;
-import com.saram.jellylog.domain.pet.dto.request.UserPetUpdateRequest;
-import com.saram.jellylog.domain.pet.dto.response.PetResponse;
-import com.saram.jellylog.domain.pet.dto.response.UserPetResponse;
-import com.saram.jellylog.domain.pet.entity.UserPet;
-import com.saram.jellylog.domain.pet.entity.UserPetId;
-import com.saram.jellylog.domain.pet.repository.PetRepository;
-import com.saram.jellylog.domain.pet.repository.UserPetRepository;
+import com.saram.jellylog.pet.dto.request.UserPetCreateRequest;
+import com.saram.jellylog.pet.dto.request.UserPetUpdateRequest;
+import com.saram.jellylog.pet.dto.response.PetResponse;
+import com.saram.jellylog.pet.dto.response.UserPetResponse;
+import com.saram.jellylog.pet.entity.UserPet;
+import com.saram.jellylog.pet.entity.UserPetId;
+import com.saram.jellylog.pet.repository.PetRepository;
+import com.saram.jellylog.pet.repository.UserPetRepository;
 import com.saram.jellylog.global.exception.ConflictException;
 import com.saram.jellylog.global.exception.NotFoundException;
 import java.util.List;
