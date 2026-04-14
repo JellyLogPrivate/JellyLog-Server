@@ -1,7 +1,7 @@
-package com.saram.jellylog.domain.pet.repository;
+package com.saram.jellylog.pet.repository;
 
-import com.saram.jellylog.domain.pet.entity.UserPet;
-import com.saram.jellylog.domain.pet.entity.UserPetId;
+import com.saram.jellylog.pet.entity.UserPet;
+import com.saram.jellylog.pet.entity.UserPetId;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

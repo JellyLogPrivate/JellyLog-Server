@@ -1,4 +1,4 @@
-package com.saram.jellylog.domain.furniture.dto.response;
+package com.saram.jellylog.furniture.dto.response;
 
 import java.time.LocalDateTime;
 
@@ -10,4 +10,3 @@ public record UserFurnitureResponse(
     LocalDateTime updatedAt
 ) {
 }
-

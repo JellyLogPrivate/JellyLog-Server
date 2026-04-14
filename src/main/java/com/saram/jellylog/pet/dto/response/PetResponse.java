@@ -1,6 +1,6 @@
-package com.saram.jellylog.domain.pet.dto.response;
+package com.saram.jellylog.pet.dto.response;
 
-import com.saram.jellylog.domain.pet.entity.Pet;
+import com.saram.jellylog.pet.entity.Pet;
 
 public record PetResponse(
     Long petCode,

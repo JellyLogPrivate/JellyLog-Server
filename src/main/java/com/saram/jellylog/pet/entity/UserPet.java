@@ -1,4 +1,4 @@
-package com.saram.jellylog.domain.pet.entity;
+package com.saram.jellylog.pet.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -56,6 +56,10 @@ public class UserPet {
         this.userPetExp = exp;
         this.userPetEmotion = emotion;
         this.userPetUpdatedAt = LocalDateTime.now();
+    }
+
+    public void updateStatus(Integer level, Long exp, PetEmotion emotion) {
+        updateStatus(level, exp, emotion.name());
     }
 
     public UserPetId getId() {

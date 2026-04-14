@@ -1,4 +1,4 @@
-package com.saram.jellylog.domain.furniture.dto.request;
+package com.saram.jellylog.furniture.dto.request;
 
 public record FurnitureUpdateRequest(
     String furnitureName,
@@ -10,4 +10,3 @@ public record FurnitureUpdateRequest(
     Integer furnitureDepthIndex
 ) {
 }
-

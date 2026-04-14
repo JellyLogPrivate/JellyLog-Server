@@ -1,6 +1,6 @@
-package com.saram.jellylog.domain.pet.repository;
+package com.saram.jellylog.pet.repository;
 
-import com.saram.jellylog.domain.pet.entity.Pet;
+import com.saram.jellylog.pet.entity.Pet;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PetRepository extends JpaRepository<Pet, Long> {

@@ -1,4 +1,4 @@
-package com.saram.jellylog.domain.food.entity;
+package com.saram.jellylog.food.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,6 +30,22 @@ public class UserFood {
     private LocalDateTime userFoodUpdatedAt;
 
     public UserFood() {
+    }
+
+    public UserFood(Long userCode, Long foodCode, Integer userFoodQuantity, LocalDateTime userFoodUpdatedAt) {
+        this.userCode = userCode;
+        this.foodCode = foodCode;
+        this.userFoodQuantity = userFoodQuantity;
+        this.userFoodUpdatedAt = userFoodUpdatedAt;
+    }
+
+    public static UserFood create(Long userCode, Long foodCode, Integer quantity, LocalDateTime updatedAt) {
+        return new UserFood(userCode, foodCode, quantity, updatedAt);
+    }
+
+    public void updateQuantity(Integer quantity, LocalDateTime updatedAt) {
+        this.userFoodQuantity = quantity;
+        this.userFoodUpdatedAt = updatedAt;
     }
 
     public Long getUserFoodCode() {

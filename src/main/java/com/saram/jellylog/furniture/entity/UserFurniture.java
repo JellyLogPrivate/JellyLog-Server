@@ -1,4 +1,4 @@
-package com.saram.jellylog.domain.furniture.entity;
+package com.saram.jellylog.furniture.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -72,4 +72,3 @@ public class UserFurniture {
         this.userFurnitureUpdatedAt = userFurnitureUpdatedAt;
     }
 }
-
