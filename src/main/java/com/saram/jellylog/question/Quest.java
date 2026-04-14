@@ -13,8 +13,8 @@ import lombok.Setter;
 public class Quest {
     @Id
     @GeneratedValue
-    private Long question_code;
+    private Long quest_Id;
 
-    private int question_order;
+    private int quest_order;
     private String quest_content;
 }

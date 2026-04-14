@@ -7,7 +7,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/question")
+@RequestMapping("/quest")
 public class QuestController {
     private final QuestService questService;
 
