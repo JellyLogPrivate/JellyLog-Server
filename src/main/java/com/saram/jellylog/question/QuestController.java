@@ -1,10 +1,7 @@
 package com.saram.jellylog.question;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -12,10 +9,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/question")
 public class QuestController {
-    private QuestService questService;
+    private final QuestService questService;
 
-    private void setQuestService(QuestService questService) {
-        this.questService = questService;
+
+    @PostMapping
+    public Quest create(@RequestBody Quest quest) {
+        return questService.create(quest);
     }
 
     @GetMapping

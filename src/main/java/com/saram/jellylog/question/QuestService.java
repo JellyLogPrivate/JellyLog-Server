@@ -12,6 +12,10 @@ public class QuestService {
         this.questRepository = questRepository;
     }
 
+    public Quest create(Quest quest) {
+        return questRepository.save(quest);
+    }
+
     public List<Quest> getQuests() {
         return questRepository.findAll();
     }
@@ -19,6 +23,5 @@ public class QuestService {
     public Quest getQuestById(Long id) {
         return questRepository.findById(id).get();
     }
-
 
 }
