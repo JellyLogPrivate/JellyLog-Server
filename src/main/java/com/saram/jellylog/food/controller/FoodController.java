@@ -1,9 +1,9 @@
-package com.saram.jellylog.domain.food.controller;
+package com.saram.jellylog.food.controller;
 
-import com.saram.jellylog.domain.food.dto.request.FoodCreateRequest;
-import com.saram.jellylog.domain.food.dto.request.FoodUpdateRequest;
-import com.saram.jellylog.domain.food.dto.response.FoodResponse;
-import com.saram.jellylog.domain.food.service.FoodService;
+import com.saram.jellylog.food.dto.request.FoodCreateRequest;
+import com.saram.jellylog.food.dto.request.FoodUpdateRequest;
+import com.saram.jellylog.food.dto.response.FoodResponse;
+import com.saram.jellylog.food.service.FoodService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

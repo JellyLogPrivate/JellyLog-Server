@@ -1,4 +1,4 @@
-package com.saram.jellylog.domain.food.dto.response;
+package com.saram.jellylog.food.dto.response;
 
 public record FoodResponse(
     Long foodCode,

@@ -1,6 +1,6 @@
-package com.saram.jellylog.domain.food.repository;
+package com.saram.jellylog.food.repository;
 
-import com.saram.jellylog.domain.food.entity.UserFood;
+import com.saram.jellylog.food.entity.UserFood;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

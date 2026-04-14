@@ -1,13 +1,14 @@
-package com.saram.jellylog.domain.food.service;
+package com.saram.jellylog.food.service;
 
-import com.saram.jellylog.domain.food.dto.request.FeedPetRequest;
-import com.saram.jellylog.domain.food.entity.Food;
-import com.saram.jellylog.domain.food.entity.UserFood;
-import com.saram.jellylog.domain.food.repository.FoodRepository;
-import com.saram.jellylog.domain.food.repository.UserFoodRepository;
-import com.saram.jellylog.domain.pet.dto.response.UserPetResponse;
-import com.saram.jellylog.domain.pet.entity.UserPet;
-import com.saram.jellylog.domain.pet.repository.UserPetRepository;
+import com.saram.jellylog.food.dto.request.FeedPetRequest;
+import com.saram.jellylog.food.entity.Food;
+import com.saram.jellylog.food.entity.UserFood;
+import com.saram.jellylog.food.repository.FoodRepository;
+import com.saram.jellylog.food.repository.UserFoodRepository;
+import com.saram.jellylog.pet.dto.response.UserPetResponse;
+import com.saram.jellylog.pet.entity.PetEmotion;
+import com.saram.jellylog.pet.entity.UserPet;
+import com.saram.jellylog.pet.repository.UserPetRepository;
 import com.saram.jellylog.global.exception.ConflictException;
 import com.saram.jellylog.global.exception.NotFoundException;
 import java.time.LocalDateTime;
@@ -20,7 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class FeedService {
-    // 서 반려동물에게 음식을 먹이는 로직구현
+    private static final long LEVEL_EXP_UNIT = 100L;
+
     private final UserFoodRepository userFoodRepository;
     private final FoodRepository foodRepository;
     private final UserPetRepository userPetRepository;
@@ -34,47 +36,75 @@ public class FeedService {
         this.foodRepository = foodRepository;
         this.userPetRepository = userPetRepository;
     }
-    //  사용자의 인벤토리에서 해당 음식의 수량을 조회, 반려동물의 경험치와 레벨을 업데이트
     public UserPetResponse feedPet(FeedPetRequest request) {
-        if (request.quantity() == null || request.quantity() <= 0) {
-            throw new ConflictException("Feed quantity must be positive.");
-        }
+        validateFeedQuantity(request.quantity());
 
-        UserFood userFood = userFoodRepository.findByUserCodeAndFoodCode(request.userCode(), request.foodCode())
-            .orElseThrow(() -> new NotFoundException("Inventory item not found."));
+        UserFood userFood = getUserFood(request.userCode(), request.foodCode());
+        int currentQty = getCurrentQuantity(userFood);
+        validateEnoughQuantity(currentQty, request.quantity());
 
-        int currentQty = userFood.getUserFoodQuantity() == null ? 0 : userFood.getUserFoodQuantity();
-        // 음식 수량이 부족한 경우나 인벤토리에 해당 음식이 없는 경우에는 예외처리
-        if (currentQty < request.quantity()) {
-            throw new ConflictException("Not enough food quantity.");
-        }
+        Food food = getFood(request.foodCode());
+        UserPet userPet = getUserPet(request.userCode(), request.petCode());
 
-        Food food = foodRepository.findById(request.foodCode())
-            .orElseThrow(() -> new NotFoundException("Food not found."));
+        long nextExp = calculateNextExp(userPet, food, request.quantity());
+        int nextLevel = calculateNextLevel(userPet, nextExp);
 
-        UserPet userPet = userPetRepository.findByIdUserCodeAndIdPetCode(request.userCode(), request.petCode())
-            .orElseThrow(() -> new NotFoundException("User pet not found."));
-
-        long foodExp = food.getFoodExp() == null ? 0L : food.getFoodExp();
-        long gainedExp = foodExp * request.quantity();
-        long currentExp = userPet.getUserPetExp() == null ? 0L : userPet.getUserPetExp();
-        long nextExp = currentExp + gainedExp;
-
-        int currentLevel = userPet.getUserPetLevel() == null ? 1 : userPet.getUserPetLevel();
-        int calculatedLevel = (int) (nextExp / 100L) + 1;
-        int nextLevel = Math.max(currentLevel, calculatedLevel);
-
-        userPet.updateStatus(nextLevel, nextExp, "HAPPY");
-
-        int remainingQty = currentQty - request.quantity();
-        if (remainingQty == 0) {
-            userFoodRepository.delete(userFood);
-        } else {
-            userFood.setUserFoodQuantity(remainingQty);
-            userFood.setUserFoodUpdatedAt(LocalDateTime.now());
-        }
+        userPet.updateStatus(nextLevel, nextExp, PetEmotion.HAPPY);
+        decreaseInventory(userFood, currentQty, request.quantity());
 
         return UserPetResponse.from(userPet);
+    }
+
+    private void validateFeedQuantity(Integer quantity) {
+        if (quantity == null || quantity <= 0) {
+            throw new ConflictException("Feed quantity must be positive.");
+        }
+    }
+
+    private UserFood getUserFood(Long userCode, Long foodCode) {
+        return userFoodRepository.findByUserCodeAndFoodCode(userCode, foodCode)
+            .orElseThrow(() -> new NotFoundException("Inventory item not found."));
+    }
+
+    private int getCurrentQuantity(UserFood userFood) {
+        return userFood.getUserFoodQuantity() == null ? 0 : userFood.getUserFoodQuantity();
+    }
+
+    private void validateEnoughQuantity(int currentQty, int feedQty) {
+        if (currentQty < feedQty) {
+            throw new ConflictException("Not enough food quantity.");
+        }
+    }
+
+    private Food getFood(Long foodCode) {
+        return foodRepository.findById(foodCode)
+            .orElseThrow(() -> new NotFoundException("Food not found."));
+    }
+
+    private UserPet getUserPet(Long userCode, Long petCode) {
+        return userPetRepository.findByIdUserCodeAndIdPetCode(userCode, petCode)
+            .orElseThrow(() -> new NotFoundException("User pet not found."));
+    }
+
+    private long calculateNextExp(UserPet userPet, Food food, int quantity) {
+        long foodExp = food.getFoodExp() == null ? 0L : food.getFoodExp();
+        long currentExp = userPet.getUserPetExp() == null ? 0L : userPet.getUserPetExp();
+        return currentExp + (foodExp * quantity);
+    }
+
+    private int calculateNextLevel(UserPet userPet, long nextExp) {
+        int currentLevel = userPet.getUserPetLevel() == null ? 1 : userPet.getUserPetLevel();
+        int calculatedLevel = (int) (nextExp / LEVEL_EXP_UNIT) + 1;
+        return Math.max(currentLevel, calculatedLevel);
+    }
+
+    private void decreaseInventory(UserFood userFood, int currentQty, int feedQty) {
+        int remainingQty = currentQty - feedQty;
+        if (remainingQty == 0) {
+            userFoodRepository.delete(userFood);
+            return;
+        }
+        userFood.updateQuantity(remainingQty, LocalDateTime.now());
     }
 }
 

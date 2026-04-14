@@ -1,11 +1,11 @@
-package com.saram.jellylog.domain.food.service;
+package com.saram.jellylog.food.service;
 
-import com.saram.jellylog.domain.food.dto.request.UserFoodCreateRequest;
-import com.saram.jellylog.domain.food.dto.request.UserFoodUpdateRequest;
-import com.saram.jellylog.domain.food.dto.response.UserFoodResponse;
-import com.saram.jellylog.domain.food.entity.UserFood;
-import com.saram.jellylog.domain.food.repository.FoodRepository;
-import com.saram.jellylog.domain.food.repository.UserFoodRepository;
+import com.saram.jellylog.food.dto.request.UserFoodCreateRequest;
+import com.saram.jellylog.food.dto.request.UserFoodUpdateRequest;
+import com.saram.jellylog.food.dto.response.UserFoodResponse;
+import com.saram.jellylog.food.entity.UserFood;
+import com.saram.jellylog.food.repository.FoodRepository;
+import com.saram.jellylog.food.repository.UserFoodRepository;
 import com.saram.jellylog.global.exception.ConflictException;
 import com.saram.jellylog.global.exception.NotFoundException;
 import java.time.LocalDateTime;
@@ -44,11 +44,12 @@ public class InventoryService {
             throw new ConflictException("Inventory item already exists.");
         }
 
-        UserFood userFood = new UserFood();
-        userFood.setUserCode(request.userCode());
-        userFood.setFoodCode(request.foodCode());
-        userFood.setUserFoodQuantity(request.quantity());
-        userFood.setUserFoodUpdatedAt(LocalDateTime.now());
+        UserFood userFood = UserFood.create(
+            request.userCode(),
+            request.foodCode(),
+            request.quantity(),
+            LocalDateTime.now()
+        );
 
         return toResponse(userFoodRepository.save(userFood));
     }
@@ -57,8 +58,7 @@ public class InventoryService {
         UserFood userFood = userFoodRepository.findByUserCodeAndFoodCode(userCode, foodCode)
             .orElseThrow(() -> new NotFoundException("Inventory item not found."));
 
-        userFood.setUserFoodQuantity(request.quantity());
-        userFood.setUserFoodUpdatedAt(LocalDateTime.now());
+        userFood.updateQuantity(request.quantity(), LocalDateTime.now());
 
         return toResponse(userFood);
     }

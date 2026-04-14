@@ -1,4 +1,4 @@
-package com.saram.jellylog.domain.food.dto.request;
+package com.saram.jellylog.food.dto.request;
 
 public record FeedPetRequest(
     Long userCode,

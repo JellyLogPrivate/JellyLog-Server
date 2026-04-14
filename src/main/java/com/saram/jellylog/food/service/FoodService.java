@@ -1,10 +1,10 @@
-package com.saram.jellylog.domain.food.service;
+package com.saram.jellylog.food.service;
 
-import com.saram.jellylog.domain.food.dto.request.FoodCreateRequest;
-import com.saram.jellylog.domain.food.dto.request.FoodUpdateRequest;
-import com.saram.jellylog.domain.food.dto.response.FoodResponse;
-import com.saram.jellylog.domain.food.entity.Food;
-import com.saram.jellylog.domain.food.repository.FoodRepository;
+import com.saram.jellylog.food.dto.request.FoodCreateRequest;
+import com.saram.jellylog.food.dto.request.FoodUpdateRequest;
+import com.saram.jellylog.food.dto.response.FoodResponse;
+import com.saram.jellylog.food.entity.Food;
+import com.saram.jellylog.food.repository.FoodRepository;
 import com.saram.jellylog.global.exception.NotFoundException;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -33,11 +33,12 @@ public class FoodService {
     }
 
     public FoodResponse createFood(FoodCreateRequest request) {
-        Food food = new Food();
-        food.setFoodName(request.foodName());
-        food.setFoodImage(request.foodImage());
-        food.setFoodPrice(request.foodPrice());
-        food.setFoodExp(request.foodExp());
+        Food food = Food.create(
+            request.foodName(),
+            request.foodImage(),
+            request.foodPrice(),
+            request.foodExp()
+        );
         return toResponse(foodRepository.save(food));
     }
 
@@ -45,10 +46,12 @@ public class FoodService {
         Food food = foodRepository.findById(foodCode)
             .orElseThrow(() -> new NotFoundException("Food not found."));
 
-        food.setFoodName(request.foodName());
-        food.setFoodImage(request.foodImage());
-        food.setFoodPrice(request.foodPrice());
-        food.setFoodExp(request.foodExp());
+        food.updateInfo(
+            request.foodName(),
+            request.foodImage(),
+            request.foodPrice(),
+            request.foodExp()
+        );
 
         return toResponse(food);
     }
