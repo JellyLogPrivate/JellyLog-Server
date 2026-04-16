@@ -1,5 +1,8 @@
-package com.saram.jellylog.user.entity;
+package com.saram.jellylog.user;
 
 public enum AuthProvider {
-    GOOGLE
+    GOOGLE,
+    KAKAO,
+    NAVER
 }
+
