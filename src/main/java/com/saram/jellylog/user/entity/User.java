@@ -40,6 +40,12 @@ public class User {
     @Column(nullable = false, unique = true, columnDefinition = "TEXT")
     private String userAuthProviderId;
 
+    // JWT Refresh Token
+    private String userRefreshToken;
+
+    // JWT Refresh Token 만료 시간
+    private LocalDateTime userRefreshTokenExpiredAt;
+
     // 알림 허용 여부 (0: false / 1: true)
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     @ColumnDefault("1")
