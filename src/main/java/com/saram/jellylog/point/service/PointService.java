@@ -7,6 +7,7 @@ import com.saram.jellylog.point.dto.PointResponse;
 import com.saram.jellylog.point.entity.Point;
 import com.saram.jellylog.point.repository.PointRepository;
 import java.util.List;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,12 @@ public class PointService {
 
     @Transactional(readOnly = true)
     public List<PointResponse> getUserPoints(Long userCode) {
-        return pointRepository.findByUserCodeOrderByPointLogCreatedAtDescPointLogCodeDesc(userCode)
+        Sort sort = Sort.by(
+            Sort.Order.desc("pointLogCreatedAt"),
+            Sort.Order.desc("pointLogCode")
+        );
+
+        return pointRepository.findByUserCode(userCode, sort)
             .stream()
             .map(this::toResponse)
             .toList();
