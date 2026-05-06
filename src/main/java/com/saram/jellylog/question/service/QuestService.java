@@ -50,7 +50,7 @@ public class QuestService {
             List<Map<String, Object>> parts = (List<Map<String, Object>>) content.get("parts");
             return parts.get(0).get("text").toString().trim();
         } catch (Exception e) {
-            return "오늘 하루느 어땠나요?";
+            return "오늘 하루는 어땠나요?";
         }
     }
 }
