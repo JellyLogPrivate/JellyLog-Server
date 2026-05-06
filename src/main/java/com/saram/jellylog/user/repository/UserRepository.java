@@ -1,5 +1,6 @@
-package com.saram.jellylog.user;
+package com.saram.jellylog.user.repository;
 
+import com.saram.jellylog.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

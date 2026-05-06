@@ -1,4 +1,4 @@
-package com.saram.jellylog.user;
+package com.saram.jellylog.user.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
