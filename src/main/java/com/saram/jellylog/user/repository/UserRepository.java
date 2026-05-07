@@ -8,4 +8,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUserAuthProviderId(String userAuthProviderId);
 
+    Optional<User> findByUserRefreshToken(String userRefreshToken);
+
 }

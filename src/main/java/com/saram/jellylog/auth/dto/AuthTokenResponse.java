@@ -1,11 +1,13 @@
-package com.saram.jellylog.login.dto;
+package com.saram.jellylog.auth.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class LoginResponse {
+@AllArgsConstructor
+public class AuthTokenResponse {
     private String userRefreshToken;
     private String userAccessToken;
     private Long userCode;
