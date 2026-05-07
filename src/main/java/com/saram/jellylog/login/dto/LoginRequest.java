@@ -8,6 +8,15 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class LoginRequest {
+    private String userAuthProvider;
     private String userAuthProvdier;
     private String userAuthProviderId;
+
+    public String getResolvedAuthProvider() {
+        if (userAuthProvider != null && !userAuthProvider.isBlank()) {
+            return userAuthProvider;
+        }
+
+        return userAuthProvdier;
+    }
 }
