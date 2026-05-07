@@ -1,8 +1,8 @@
 package com.saram.jellylog.auth.service;
 
 import com.saram.jellylog.auth.dto.AuthUserResponse;
-import com.saram.jellylog.auth.dto.LoginRequest;
-import com.saram.jellylog.auth.dto.LoginResponse;
+import com.saram.jellylog.auth.dto.AuthLoginRequest;
+import com.saram.jellylog.auth.dto.AuthTokenResponse;
 import com.saram.jellylog.auth.security.JwtTokenProvider;
 import com.saram.jellylog.user.entity.AuthProvider;
 import com.saram.jellylog.user.entity.User;
@@ -20,7 +20,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public LoginResponse login(LoginRequest request) {
+    public AuthTokenResponse login(AuthLoginRequest request) {
         AuthProvider authProvider = parseAuthProvider(request.getResolvedAuthProvider());
         if (request.getUserAuthProviderId() == null || request.getUserAuthProviderId().isBlank()) {
             throw new IllegalArgumentException("userAuthProviderId는 필수입니다.");
@@ -37,7 +37,7 @@ public class AuthService {
     }
 
     @Transactional
-    public LoginResponse refresh(String refreshToken) {
+    public AuthTokenResponse refresh(String refreshToken) {
         if (refreshToken == null || refreshToken.isBlank()) {
             throw new IllegalArgumentException("refresh token은 필수입니다.");
         }
@@ -67,14 +67,14 @@ public class AuthService {
     }
 
     @Transactional
-    public LoginResponse issueTokens(User user) {
+    public AuthTokenResponse issueTokens(User user) {
         String accessToken = jwtTokenProvider.createAccessToken(user.getUserCode());
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getUserCode());
 
         user.setUserRefreshToken(refreshToken);
         user.setUserRefreshTokenExpiredAt(LocalDateTime.now().plusSeconds(jwtTokenProvider.getRefreshTokenValiditySeconds()));
 
-        return new LoginResponse(refreshToken, accessToken, user.getUserCode());
+        return new AuthTokenResponse(refreshToken, accessToken, user.getUserCode());
     }
 
     private User createUser(AuthProvider authProvider, String providerId) {
