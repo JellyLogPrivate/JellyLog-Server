@@ -5,6 +5,7 @@ import com.saram.jellylog.auth.dto.LoginRequest;
 import com.saram.jellylog.auth.dto.LoginResponse;
 import com.saram.jellylog.auth.dto.RefreshTokenRequest;
 import com.saram.jellylog.auth.service.AuthService;
+import com.saram.jellylog.global.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,24 +23,24 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(authService.login(request)));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<LoginResponse> refresh(@RequestBody RefreshTokenRequest request) {
-        return ResponseEntity.ok(authService.refresh(request.getUserRefreshToken()));
+    public ResponseEntity<ApiResponse<LoginResponse>> refresh(@RequestBody RefreshTokenRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(authService.refresh(request.getUserRefreshToken())));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(Authentication authentication) {
+    public ResponseEntity<ApiResponse<Void>> logout(Authentication authentication) {
         authService.logout(currentUserCode(authentication));
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.success());
     }
 
     @GetMapping("/me")
-    public ResponseEntity<AuthUserResponse> me(Authentication authentication) {
-        return ResponseEntity.ok(authService.me(currentUserCode(authentication)));
+    public ResponseEntity<ApiResponse<AuthUserResponse>> me(Authentication authentication) {
+        return ResponseEntity.ok(ApiResponse.success(authService.me(currentUserCode(authentication))));
     }
 
     private Long currentUserCode(Authentication authentication) {
