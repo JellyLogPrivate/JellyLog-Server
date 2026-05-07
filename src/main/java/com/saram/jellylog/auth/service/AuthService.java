@@ -1,9 +1,9 @@
 package com.saram.jellylog.auth.service;
 
 import com.saram.jellylog.auth.dto.AuthUserResponse;
+import com.saram.jellylog.auth.dto.LoginRequest;
+import com.saram.jellylog.auth.dto.LoginResponse;
 import com.saram.jellylog.auth.security.JwtTokenProvider;
-import com.saram.jellylog.login.dto.LoginRequest;
-import com.saram.jellylog.login.dto.LoginResponse;
 import com.saram.jellylog.user.entity.AuthProvider;
 import com.saram.jellylog.user.entity.User;
 import com.saram.jellylog.user.repository.UserRepository;

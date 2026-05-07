@@ -1,10 +1,10 @@
 package com.saram.jellylog.auth.controller;
 
 import com.saram.jellylog.auth.dto.AuthUserResponse;
+import com.saram.jellylog.auth.dto.LoginRequest;
+import com.saram.jellylog.auth.dto.LoginResponse;
 import com.saram.jellylog.auth.dto.RefreshTokenRequest;
 import com.saram.jellylog.auth.service.AuthService;
-import com.saram.jellylog.login.dto.LoginRequest;
-import com.saram.jellylog.login.dto.LoginResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
