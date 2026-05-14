@@ -1,7 +1,9 @@
 package com.saram.jellylog.global.config;
 
+import com.saram.jellylog.auth.oauth.OAuth2LoginSuccessHandler;
 import com.saram.jellylog.auth.security.JwtAuthenticationFilter;
-import com.saram.jellylog.user.service.CustomOAuth2UserService;
+import com.saram.jellylog.auth.oauth.CustomOAuth2UserService;
+import com.saram.jellylog.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.context.annotation.Bean;
@@ -17,10 +19,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, UserRepository userRepository) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -28,7 +31,6 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/").permitAll()
-<<<<<<< HEAD
                         .requestMatchers("/api/auth/login", "/api/auth/refresh").permitAll()
                         .requestMatchers("/oauth2/authorization/google").permitAll()
                         .requestMatchers("/login/oauth2/code/google").permitAll()
@@ -44,25 +46,19 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
-                        .defaultSuccessUrl("/", true)
-                )
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-=======
-                        .requestMatchers("/oauth2/authorization/google").permitAll()
-                        .requestMatchers("/login/oauth2/code/google").permitAll()
-                        .anyRequest().permitAll() // 개발 편의용 전체 허용
+                        .successHandler(oAuth2LoginSuccessHandler)
                 )
 
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(customOAuth2UserService)
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(
+                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
                         )
-                        .defaultSuccessUrl("/", true)
+                )
+
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class
                 );
->>>>>>> 8c703eb (feat: Google OAuth2 로그인을 위한 SecurityConfig 설정)
 
         return http.build();
     }

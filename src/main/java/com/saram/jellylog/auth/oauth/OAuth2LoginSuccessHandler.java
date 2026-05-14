@@ -2,6 +2,7 @@ package com.saram.jellylog.auth.oauth;
 
 import com.saram.jellylog.auth.dto.AuthTokenResponse;
 import com.saram.jellylog.auth.service.AuthService;
+import com.saram.jellylog.global.ApiResponse;
 import com.saram.jellylog.user.entity.User;
 import com.saram.jellylog.user.repository.UserRepository;
 import jakarta.servlet.ServletException;
@@ -49,6 +50,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
-        objectMapper.writeValue(response.getWriter(), loginResponse);
+        objectMapper.writeValue(response.getWriter(), ApiResponse.success(loginResponse));
     }
 }
