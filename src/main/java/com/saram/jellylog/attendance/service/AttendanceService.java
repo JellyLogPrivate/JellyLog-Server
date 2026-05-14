@@ -1,7 +1,6 @@
 package com.saram.jellylog.attendance.service;
 
 import com.saram.jellylog.attendance.dto.request.AttendanceCreateRequest;
-import com.saram.jellylog.attendance.dto.request.AttendanceUpdateRequest;
 import com.saram.jellylog.attendance.dto.response.AttendanceResponse;
 import com.saram.jellylog.attendance.entity.Attendance;
 import com.saram.jellylog.attendance.repository.AttendanceRepository;
@@ -45,26 +44,12 @@ public class AttendanceService {
                 .toList();
     }
 
-    // userCode를 파라미터로 직접 받도록 변경
+    // userCode 파라미터 추가
     public AttendanceResponse createAttendance(Long userCode, AttendanceCreateRequest request) {
         Attendance attendance = new Attendance();
         attendance.setUserCode(userCode);
         attendance.setAttendenceDate(request.attendenceDate());
         return toResponse(attendanceRepository.save(attendance));
-    }
-
-    public AttendanceResponse updateAttendance(Long attendenceCode, AttendanceUpdateRequest request) {
-        Attendance attendance = attendanceRepository.findById(attendenceCode)
-                .orElseThrow(() -> new NotFoundException("Attendance not found."));
-        attendance.setAttendenceDate(request.attendenceDate());
-        return toResponse(attendance);
-    }
-
-    public void deleteAttendance(Long attendenceCode) {
-        if (!attendanceRepository.existsById(attendenceCode)) {
-            throw new NotFoundException("Attendance not found.");
-        }
-        attendanceRepository.deleteById(attendenceCode);
     }
 
     private AttendanceResponse toResponse(Attendance attendance) {
