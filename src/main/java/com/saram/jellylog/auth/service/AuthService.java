@@ -73,6 +73,7 @@ public class AuthService {
 
         user.setUserRefreshToken(refreshToken);
         user.setUserRefreshTokenExpiredAt(LocalDateTime.now().plusSeconds(jwtTokenProvider.getRefreshTokenValiditySeconds()));
+        userRepository.save(user);
 
         return new AuthTokenResponse(refreshToken, accessToken, user.getUserCode());
     }
