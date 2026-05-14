@@ -3,6 +3,7 @@ package com.saram.jellylog.question.controller;
 import com.saram.jellylog.question.entity.Quest;
 import com.saram.jellylog.question.service.QuestService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,8 +15,10 @@ public class QuestController {
     private final QuestService questService;
 
     @GetMapping("/generate")
-    public String generateQuest() {
-        return questService.generateQuest();
+    public String generateQuest(Authentication authentication) {
+
+        Long userCode = Long.valueOf(authentication.getName());
+        return questService.getDailyQuest(userCode);
     }
 
 //    @PostMapping
