@@ -21,7 +21,7 @@ public class Answer {
     private String answerCode;
 
     @Column(name = "user_code", nullable = false)
-    private String userCode;
+    private Long userCode;
 
     @Column(name = "question_code", nullable = false)
     private String questionCode;
