@@ -6,5 +6,5 @@ import lombok.AllArgsConstructor;
 @Getter
 @AllArgsConstructor
 public class ProfileRequest {
-    private String userName;
+    private String userNickname;
 }

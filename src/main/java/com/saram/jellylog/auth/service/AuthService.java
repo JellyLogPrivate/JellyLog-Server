@@ -82,7 +82,7 @@ public class AuthService {
         User user = new User();
         user.setUserAuthProvider(authProvider);
         user.setUserAuthProviderId(providerId);
-        user.setUserName("사용자님");
+        user.setUserNickname("사용자");
         return userRepository.save(user);
     }
 
