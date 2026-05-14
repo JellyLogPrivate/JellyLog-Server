@@ -1,46 +1,57 @@
 package com.saram.jellylog.question.service;
 
+import com.saram.jellylog.question.repository.QuestRepository;
+import com.saram.jellylog.answer.repository.AnswerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class QuestService {
-    private final RestTemplate restTemplate;
+    private final QuestRepository questRepository;
+    private final AnswerRepository answerRepository;
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Value("${gemini.api.key}")
     private String apiKey;
 
-    public QuestService() {
-        this.restTemplate = new RestTemplate();
+    public String getDailyQuest(Long userCode) {
+        LocalDateTime lastAnswerTime = answerRepository.findTopByUserCodeOrderByAnswerCreatedAtDesc(userCode)
+                .map(answer -> answer.getAnswerCreatedAt())
+                .orElse(LocalDateTime.MIN);
+
+        if (lastAnswerTime.toLocalDate().isEqual(LocalDate.now())) {
+            return "오늘의 질문에 이미 답변하셨습니다.";
+        }
+
+        return generateAndSaveQuest();
     }
 
-    public String generateQuest() {
+    private String generateAndSaveQuest() {
         String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Map<String, Object> body = Map.of("contents", List.of(Map.of("parts", List.of(Map.of("text", "사용자가 일기를 쓸 수 있도록 돕는 질문을 하나만 만들어줘. 또한 단답형 질문은 하지말고 너무 단순한 질문 또한 하지마. 질문만 텍스트로 보내줘.")))));
+        Map<String, Object> body = Map.of(
+                "contents", List.of(Map.of("parts", List.of(Map.of("text", "일기 작성을 돕는 짧은 질문을 하나만 만들어줘."))))
+        );
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+        Map<String, Object> response = restTemplate.postForObject(url, entity, Map.class);
 
-        try {
-            Map<String, Object> response = restTemplate.postForObject(url, entity, Map.class);
-            return extractText(response);
-        } catch (HttpClientErrorException e) {
-            System.err.println("API Error: " + e.getResponseBodyAsString());
-            return "api error";
-        } catch (Exception e) {
-            return "server error" + e.getMessage();
-        }
+        String questionText = extractText(response);
+        return questionText;
     }
 
     private String extractText(Map<String, Object> response) {
