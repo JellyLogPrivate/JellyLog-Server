@@ -12,7 +12,7 @@ public record AuthUserResponse(
     public static AuthUserResponse from(User user) {
         return new AuthUserResponse(
                 user.getUserCode(),
-                user.getUserName(),
+                user.getUserNickname(),
                 user.getUserPoints(),
                 user.getUserAuthProvider()
         );

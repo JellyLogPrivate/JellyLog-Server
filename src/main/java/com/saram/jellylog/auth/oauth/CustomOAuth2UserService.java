@@ -35,14 +35,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         Map<String, Object> attributes = oauth2User.getAttributes();
         String providerId = getRequiredAttribute(attributes, GOOGLE_PROVIDER_ID_ATTRIBUTE);
-        String userName = getAttributeOrDefault(attributes, GOOGLE_NAME_ATTRIBUTE, "사용자님");
+        String userNickname = getAttributeOrDefault(attributes, GOOGLE_NAME_ATTRIBUTE, "사용자");
 
         User user = userRepository.findByUserAuthProviderId(providerId)
                 .orElseGet(() -> {
                     User newUser = new User();
                     newUser.setUserAuthProvider(AuthProvider.GOOGLE);
                     newUser.setUserAuthProviderId(providerId);
-                    newUser.setUserName(userName);
+                    newUser.setUserNickname(userNickname);
                     return userRepository.save(newUser);
                 });
 
@@ -59,12 +59,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user = new User();
         user.setUserAuthProvider(AuthProvider.GOOGLE);
         user.setUserAuthProviderId(providerId);
-        user.setUserName(userName);
+        user.setUserNickname(userName);
         return user;
     }
 
     private User updateUserName(User user, String userName) {
-        user.setUserName(userName);
+        user.setUserNickname(userName);
         return user;
     }
 
