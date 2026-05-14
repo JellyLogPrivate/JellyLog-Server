@@ -19,13 +19,13 @@ public class ProfileService {
     @Transactional(readOnly = true)
     public ProfileResponse getProfile(Long userCode) {
         User user = getUser(userCode);
-        return new ProfileResponse(user.getUserName());
+        return new ProfileResponse(user.getUserNickname());
     }
 
     public ProfileResponse updateProfile(Long userCode, ProfileRequest request) {
         User user = getUser(userCode);
-        user.setUserName(request.getUserName());
-        return new ProfileResponse(user.getUserName());
+        user.setUserNickname(request.getUserNickname());
+        return new ProfileResponse(user.getUserNickname());
     }
 
     public User getUser(Long userCode) {

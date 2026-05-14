@@ -23,8 +23,8 @@ public class User {
 
     // 사용자 닉네임 (별명)
     @Column(nullable = false, length = 50)
-    @ColumnDefault("'사용자님'")
-    private String userName = "'사용자님'";
+    @ColumnDefault("'사용자'")
+    private String userNickname = "'사용자'";
 
     // 사용자 보유 포인트
     @Column(nullable = false)
