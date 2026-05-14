@@ -38,8 +38,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String userName = getAttributeOrDefault(attributes, GOOGLE_NAME_ATTRIBUTE, "사용자님");
 
         User user = userRepository.findByUserAuthProviderId(providerId)
-                .map(existingUser -> updateUserName(existingUser, userName))
-                .orElseGet(() -> createGoogleUser(providerId, userName));
+                .orElseGet(() -> {
+                    User newUser = new User();
+                    newUser.setUserAuthProvider(AuthProvider.GOOGLE);
+                    newUser.setUserAuthProviderId(providerId);
+                    newUser.setUserName(userName);
+                    return userRepository.save(newUser);
+                });
 
         userRepository.save(user);
 
