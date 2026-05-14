@@ -30,17 +30,6 @@ public class AttendanceController {
         this.securityUtil = securityUtil;
     }
 
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<AttendanceResponse>> getAttendances() {
-        return ResponseEntity.ok(attendanceService.getAttendances());
-    }
-
-    @GetMapping("/{attendenceCode}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AttendanceResponse> getAttendance(@PathVariable Long attendenceCode) {
-        return ResponseEntity.ok(attendanceService.getAttendance(attendenceCode));
-    }
 
     @GetMapping("/me")
     public ResponseEntity<List<AttendanceResponse>> getMyAttendances() {
