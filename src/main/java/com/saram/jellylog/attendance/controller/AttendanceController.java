@@ -48,12 +48,6 @@ public class AttendanceController {
         return ResponseEntity.ok(attendanceService.getUserAttendances(userCode));
     }
 
-    @GetMapping("/users/{userCode}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<AttendanceResponse>> getUserAttendances(@PathVariable Long userCode) {
-        return ResponseEntity.ok(attendanceService.getUserAttendances(userCode));
-    }
-
     @PostMapping
     public ResponseEntity<AttendanceResponse> createAttendance(@RequestBody AttendanceCreateRequest request) {
         Long userCode = securityUtil.getCurrentUserCode();
