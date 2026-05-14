@@ -29,35 +29,33 @@ public class AttendanceService {
     @Transactional(readOnly = true)
     public AttendanceResponse getAttendance(Long attendenceCode) {
         Attendance attendance = attendanceRepository.findById(attendenceCode)
-            .orElseThrow(() -> new NotFoundException("Attendance not found."));
+                .orElseThrow(() -> new NotFoundException("Attendance not found."));
         return toResponse(attendance);
     }
 
     @Transactional(readOnly = true)
     public List<AttendanceResponse> getUserAttendances(Long userCode) {
         Sort sort = Sort.by(
-            Sort.Order.desc("attendenceDate"),
-            Sort.Order.desc("attendenceCode")
+                Sort.Order.desc("attendenceDate"),
+                Sort.Order.desc("attendenceCode")
         );
-
         return attendanceRepository.findByUserCode(userCode, sort)
-            .stream()
-            .map(this::toResponse)
-            .toList();
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
-    public AttendanceResponse createAttendance(AttendanceCreateRequest request) {
+    // userCode를 파라미터로 직접 받도록 변경
+    public AttendanceResponse createAttendance(Long userCode, AttendanceCreateRequest request) {
         Attendance attendance = new Attendance();
-        attendance.setUserCode(request.userCode());
+        attendance.setUserCode(userCode);
         attendance.setAttendenceDate(request.attendenceDate());
-
         return toResponse(attendanceRepository.save(attendance));
     }
 
     public AttendanceResponse updateAttendance(Long attendenceCode, AttendanceUpdateRequest request) {
         Attendance attendance = attendanceRepository.findById(attendenceCode)
-            .orElseThrow(() -> new NotFoundException("Attendance not found."));
-
+                .orElseThrow(() -> new NotFoundException("Attendance not found."));
         attendance.setAttendenceDate(request.attendenceDate());
         return toResponse(attendance);
     }
@@ -71,10 +69,9 @@ public class AttendanceService {
 
     private AttendanceResponse toResponse(Attendance attendance) {
         return new AttendanceResponse(
-            attendance.getAttendenceCode(),
-            attendance.getUserCode(),
-            attendance.getAttendenceDate()
+                attendance.getAttendenceCode(),
+                attendance.getUserCode(),
+                attendance.getAttendenceDate()
         );
     }
 }
-
