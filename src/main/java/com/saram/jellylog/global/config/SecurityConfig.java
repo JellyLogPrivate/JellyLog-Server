@@ -1,5 +1,6 @@
 package com.saram.jellylog.global.config;
 
+import com.saram.jellylog.auth.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.saram.jellylog.auth.oauth.OAuth2LoginSuccessHandler;
 import com.saram.jellylog.auth.security.JwtAuthenticationFilter;
 import com.saram.jellylog.auth.oauth.CustomOAuth2UserService;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    private final OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -50,6 +52,10 @@ public class SecurityConfig {
                         .anyRequest().authenticated()  // permitAll() 제거 → 인증 필요
                 )
                 .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(endpoint -> endpoint
+                                .authorizationRequestRepository(
+                                        oAuth2AuthorizationRequestBasedOnCookieRepository
+                                ))
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
