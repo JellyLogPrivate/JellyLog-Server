@@ -10,12 +10,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/quest")
+@RequestMapping("/api/quest")
 public class QuestController {
     private final QuestService questService;
 
     @GetMapping("/generate")
     public String generateQuest(Authentication authentication) {
+
 
         Long userCode = Long.valueOf(authentication.getName());
         return questService.getDailyQuest(userCode);
