@@ -1,10 +1,8 @@
 package com.saram.jellylog.answer.controller;
 
 import com.saram.jellylog.answer.dto.AnswerRequest;
-import com.saram.jellylog.answer.entity.Answer;
 import com.saram.jellylog.answer.service.AnswerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
