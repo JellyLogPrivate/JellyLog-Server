@@ -41,8 +41,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 .orElseThrow(() -> new IllegalStateException("OAuth2 사용자를 찾을 수 없습니다."));
         AuthTokenResponse loginResponse = authService.issueTokens(user);
 
-        //oAuth2AuthorizationRequestBasedOnCookieRepository
-        //        .removeAuthorizationRequestCookies(request, response);
+        oAuth2AuthorizationRequestBasedOnCookieRepository
+                .removeAuthorizationRequestCookies(request, response);
 
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
