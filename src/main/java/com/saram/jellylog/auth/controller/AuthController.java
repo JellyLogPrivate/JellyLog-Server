@@ -27,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<Void>> logout(@AuthenticationPrincipal Long userCod) {
+    public ResponseEntity<ApiResponse<Void>> logout(@AuthenticationPrincipal Long userCode) {
         authService.logout(userCode);
         return ResponseEntity.ok(ApiResponse.success());
     }
