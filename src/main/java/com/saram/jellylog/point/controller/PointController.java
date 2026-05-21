@@ -6,6 +6,7 @@ import com.saram.jellylog.point.service.PointService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,8 +34,8 @@ public class PointController {
         return ResponseEntity.ok(pointService.getPoint(pointLogCode));
     }
 
-    @GetMapping("/users/{userCode}")
-    public ResponseEntity<List<PointResponse>> getUserPoints(@PathVariable Long userCode) {
+    @GetMapping("/users")
+    public ResponseEntity<List<PointResponse>> getUserPoints(@AuthenticationPrincipal Long userCode) {
         return ResponseEntity.ok(pointService.getUserPoints(userCode));
     }
 
