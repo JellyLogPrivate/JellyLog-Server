@@ -7,6 +7,7 @@ import com.saram.jellylog.food.service.InventoryService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,14 +27,14 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
 
-    @GetMapping("/{userCode}")
-    public ResponseEntity<List<UserFoodResponse>> getUserInventory(@PathVariable Long userCode) {
+    @GetMapping
+    public ResponseEntity<List<UserFoodResponse>> getUserInventory(@AuthenticationPrincipal Long userCode) {
         return ResponseEntity.ok(inventoryService.getUserInventory(userCode));
     }
 
-    @GetMapping("/{userCode}/{foodCode}")
+    @GetMapping("/{foodCode}")
     public ResponseEntity<UserFoodResponse> getUserInventoryItem(
-        @PathVariable Long userCode,
+        @AuthenticationPrincipal Long userCode,
         @PathVariable Long foodCode
     ) {
         return ResponseEntity.ok(inventoryService.getUserInventoryItem(userCode, foodCode));
@@ -44,18 +45,18 @@ public class InventoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(inventoryService.createUserInventory(request));
     }
 
-    @PutMapping("/{userCode}/{foodCode}")
+    @PutMapping("/{foodCode}")
     public ResponseEntity<UserFoodResponse> updateUserInventory(
-        @PathVariable Long userCode,
+        @AuthenticationPrincipal Long userCode,
         @PathVariable Long foodCode,
         @RequestBody UserFoodUpdateRequest request
     ) {
         return ResponseEntity.ok(inventoryService.updateUserInventory(userCode, foodCode, request));
     }
 
-    @DeleteMapping("/{userCode}/{foodCode}")
+    @DeleteMapping("/{foodCode}")
     public ResponseEntity<Void> deleteUserInventory(
-        @PathVariable Long userCode,
+        @AuthenticationPrincipal Long userCode,
         @PathVariable Long foodCode
     ) {
         inventoryService.deleteUserInventory(userCode, foodCode);
