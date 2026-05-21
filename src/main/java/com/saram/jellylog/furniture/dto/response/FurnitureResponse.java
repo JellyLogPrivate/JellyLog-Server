@@ -5,9 +5,7 @@ public record FurnitureResponse(
     String furnitureName,
     String furnitureImage,
     Long furniturePrice,
-    String furnitureGroup,
-    Integer furniturePositionX,
-    Integer furniturePositionY,
-    Integer furnitureDepthIndex
+    Long furnitureGroup
+
 ) {
 }

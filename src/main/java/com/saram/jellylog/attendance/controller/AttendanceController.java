@@ -6,6 +6,7 @@ import com.saram.jellylog.attendance.service.AttendanceService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,8 +31,10 @@ public class AttendanceController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<List<AttendanceResponse>> getMyAttendances() {
-        Long userCode = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public ResponseEntity<List<AttendanceResponse>> getMyAttendances(
+            @AuthenticationPrincipal Long userCode
+    ) {
+
         return ResponseEntity.ok(attendanceService.getUserAttendances(userCode));
     }
 
