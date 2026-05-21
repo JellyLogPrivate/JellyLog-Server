@@ -9,8 +9,9 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter
-    @NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class Quest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +21,8 @@ public class Quest {
     @Column(name = "question_code")
     private String questionCode;
 
-    @Column(name = "quest_order")
-    private int questOrder;
+    @Column(name = "question_order", nullable = false)
+    private int questOrder = 0;
 
     @Column(name = "quest_content")
     private String content;
@@ -29,10 +30,18 @@ public class Quest {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Builder
     public Quest(String content, String questionCode) {
         this.content = content;
         this.questionCode = questionCode;
         this.createdAt = LocalDateTime.now();
         this.questOrder = 0;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
     }
 }
