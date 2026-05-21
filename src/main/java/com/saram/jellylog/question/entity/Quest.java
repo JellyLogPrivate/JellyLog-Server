@@ -1,7 +1,6 @@
 package com.saram.jellylog.question.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,8 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor
 public class Quest {
     @Id
@@ -21,27 +19,12 @@ public class Quest {
     @Column(name = "question_code")
     private String questionCode;
 
-    @Column(name = "question_order", nullable = false)
-    private int questOrder = 0;
+    @Column(name = "quest_order")
+    private int questOrder;
 
     @Column(name = "quest_content")
     private String content;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    @Builder
-    public Quest(String content, String questionCode) {
-        this.content = content;
-        this.questionCode = questionCode;
-        this.createdAt = LocalDateTime.now();
-        this.questOrder = 0;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
-    }
 }

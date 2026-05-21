@@ -1,11 +1,10 @@
 package com.saram.jellylog.question.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Setter;
 
-@Getter
-@Builder
+@Setter
 public class QuestResponse {
-    private String questionCode;
-    private String content;
+    private Long question_code;
+    private int question_order;
+    private String question_content;
 }

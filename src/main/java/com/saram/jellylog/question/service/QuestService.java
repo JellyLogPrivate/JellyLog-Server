@@ -2,9 +2,6 @@ package com.saram.jellylog.question.service;
 
 import com.saram.jellylog.question.repository.QuestRepository;
 import com.saram.jellylog.answer.repository.AnswerRepository;
-import com.saram.jellylog.answer.entity.Answer;
-import com.saram.jellylog.question.entity.Quest;
-import com.saram.jellylog.question.dto.QuestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -17,8 +14,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,37 +25,20 @@ public class QuestService {
     @Value("${gemini.api.key}")
     private String apiKey;
 
-    public QuestResponse getDailyQuest(Long userCode) {
+    public String getDailyQuest(Long userCode) {
         LocalDateTime lastAnswerTime = answerRepository.findTopByUserCodeOrderByAnswerCreatedAtDesc(userCode)
                 .map(answer -> answer.getAnswerCreatedAt())
                 .orElse(LocalDateTime.MIN);
 
         if (lastAnswerTime.toLocalDate().isEqual(LocalDate.now())) {
-            LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-            LocalDateTime endOfDay = LocalDate.now().atTime(23, 59, 59);
-            Optional<Answer> existingAnswer = answerRepository.findByUserCodeAndAnswerCreatedAtBetween(userCode, startOfDay, endOfDay);
-            if (existingAnswer.isPresent()) {
-                String questionCode = existingAnswer.get().getQuestionCode();
-                Optional<Quest> existingQuest = questRepository.findByQuestionCode(questionCode);
-                if (existingQuest.isPresent()) {
-                    return QuestResponse.builder()
-                            .questionCode(existingQuest.get().getQuestionCode())
-                            .content(existingQuest.get().getContent())
-                            .build();
-                }
-            }
-            return QuestResponse.builder().questionCode(null).content("오늘의 질문에 이미 답변하셨습니다.").build(); // Fallback
+            return "오늘의 질문에 이미 답변하셨습니다.";
         }
 
-        Quest quest = generateAndSaveQuest();
-        return QuestResponse.builder()
-                .questionCode(quest.getQuestionCode())
-                .content(quest.getContent())
-                .build();
+        return generateAndSaveQuest();
     }
 
-    private Quest generateAndSaveQuest() {
-        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=" + apiKey;
+    private String generateAndSaveQuest() {
+        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -73,9 +51,7 @@ public class QuestService {
         Map<String, Object> response = restTemplate.postForObject(url, entity, Map.class);
 
         String questionText = extractText(response);
-        Quest quest = new Quest(questionText, UUID.randomUUID().toString());
-        questRepository.save(quest);
-        return quest;
+        return questionText;
     }
 
     private String extractText(Map<String, Object> response) {

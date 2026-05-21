@@ -1,21 +1,23 @@
 package com.saram.jellylog.question.controller;
 
-import com.saram.jellylog.question.dto.QuestResponse;
+import com.saram.jellylog.question.entity.Quest;
 import com.saram.jellylog.question.service.QuestService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/quest")
+@RequestMapping("/quest")
 public class QuestController {
     private final QuestService questService;
 
     @GetMapping("/generate")
-    public QuestResponse generateQuest(@AuthenticationPrincipal Long userCode) {
+    public String generateQuest(Authentication authentication) {
+
+        Long userCode = Long.valueOf(authentication.getName());
         return questService.getDailyQuest(userCode);
     }
 
