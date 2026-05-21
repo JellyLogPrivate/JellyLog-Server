@@ -1,6 +1,7 @@
 package com.saram.jellylog.question.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,5 +33,6 @@ public class Quest {
         this.content = content;
         this.questionCode = questionCode;
         this.createdAt = LocalDateTime.now();
+        this.questOrder = 0;
     }
 }
