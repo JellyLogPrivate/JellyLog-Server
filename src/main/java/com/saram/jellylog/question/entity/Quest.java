@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor
+    @NoArgsConstructor
 public class Quest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +27,10 @@ public class Quest {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    public Quest(String content, String questionCode) {
+        this.content = content;
+        this.questionCode = questionCode;
+        this.createdAt = LocalDateTime.now();
+    }
 }

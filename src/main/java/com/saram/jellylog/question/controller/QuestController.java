@@ -1,5 +1,6 @@
 package com.saram.jellylog.question.controller;
 
+import com.saram.jellylog.question.dto.QuestResponse;
 import com.saram.jellylog.question.service.QuestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,7 +15,7 @@ public class QuestController {
     private final QuestService questService;
 
     @GetMapping("/generate")
-    public String generateQuest(@AuthenticationPrincipal Long userCode) {
+    public QuestResponse generateQuest(@AuthenticationPrincipal Long userCode) {
         return questService.getDailyQuest(userCode);
     }
 
