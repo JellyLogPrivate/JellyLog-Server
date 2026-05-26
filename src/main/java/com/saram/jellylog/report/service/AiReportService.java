@@ -39,25 +39,21 @@ public class AiReportService {
 
     @Transactional
     public AiReportResponse generateMonthlyReport(Long userCode, String yearMonthStr) {
-        // Check if report already exists
         Optional<AiReport> existingReport = aiReportRepository.findByUserCodeAndYearMonth(userCode, yearMonthStr);
         if (existingReport.isPresent()) {
             return convertToResponse(existingReport.get());
         }
 
-        // Calculate start and end of the month
         YearMonth yearMonth = YearMonth.parse(yearMonthStr);
         LocalDateTime start = yearMonth.atDay(1).atStartOfDay();
         LocalDateTime end = yearMonth.atEndOfMonth().atTime(23, 59, 59);
 
-        // Fetch answers
         List<Answer> answers = answerRepository.findAllByUserCodeAndAnswerCreatedAtBetween(userCode, start, end);
 
         if (answers.isEmpty()) {
             throw new RuntimeException("이 달에 작성된 답변이 없습니다.");
         }
 
-        // Construct prompt
         StringBuilder promptBuilder = new StringBuilder();
         promptBuilder.append("다음은 사용자가 이번 달에 작성한 질문과 답변들입니다. 이를 바탕으로 사용자의 한 달을 요약하고, 감정 변화, 주요 활동, 그리고 성장을 분석하는 리포트를 작성해 주세요.\n\n");
 
@@ -84,7 +80,7 @@ public class AiReportService {
     }
 
     private String callGemini(String promptText) {
-        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey;
+        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=" + apiKey;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

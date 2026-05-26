@@ -20,7 +20,6 @@ public class AiReportScheduler {
     private final AiReportService aiReportService;
     private final AnswerRepository answerRepository;
 
-    // Run at 00:00:00 on the 1st day of every month
     @Scheduled(cron = "0 0 0 1 * *")
     public void generateMonthlyReports() {
         YearMonth lastMonth = YearMonth.now().minusMonths(1);
