@@ -16,6 +16,10 @@ public class AnswerService {
 
     @Transactional
     public String saveAnswer(Long userCode, AnswerRequest request) {
+        if (answerRepository.existsByUserCodeAndQuestionCode(userCode, request.getQuestionCode())) {
+            throw new com.saram.jellylog.global.exception.ConflictException("이미 이 질문에 대한 답변을 작성하셨습니다.");
+        }
+
         Answer answer = new Answer();
 
         answer.setAnswerCode(UUID.randomUUID().toString());
