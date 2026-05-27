@@ -20,15 +20,14 @@ public class AiReportScheduler {
     private final AiReportService aiReportService;
     private final AnswerRepository answerRepository;
 
-    @Scheduled(cron = "0 0 0 1 * *")
+    @Scheduled(cron = "0 0/10 * * * *") // 테스트를 위해 리포트 시간 10분으로 줄임.
     public void generateMonthlyReports() {
-        YearMonth lastMonth = YearMonth.now().minusMonths(1);
-        String yearMonthStr = lastMonth.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        String yearMonthStr = java.time.YearMonth.now().toString();
 
-        log.info("Starting monthly AI report generation for: {}", yearMonthStr);
+        log.info("Starting AI report generation for: {}", yearMonthStr);
 
-        LocalDateTime start = lastMonth.atDay(1).atStartOfDay();
-        LocalDateTime end = lastMonth.atEndOfMonth().atTime(23, 59, 59);
+        LocalDateTime start = LocalDateTime.now().minusMinutes(10);
+        LocalDateTime end = LocalDateTime.now();
 
         List<Long> userCodes = answerRepository.findDistinctUserCodesByAnswerCreatedAtBetween(start, end);
 
@@ -41,6 +40,6 @@ public class AiReportScheduler {
             }
         }
 
-        log.info("Finished monthly AI report generation.");
+        log.info("Finished AI report generation.");
     }
 }

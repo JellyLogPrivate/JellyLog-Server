@@ -24,7 +24,10 @@ public class AiReportController {
     @PostMapping("/generate")
     public ApiResponse<AiReportResponse> generateReport(
             @AuthenticationPrincipal Long userCode,
-            @RequestParam String yearMonth) {
+            @RequestParam(required = false) String yearMonth) {
+        if (yearMonth == null || yearMonth.isEmpty()) {
+            yearMonth = java.time.YearMonth.now().toString();
+        }
         return ApiResponse.success(aiReportService.generateMonthlyReport(userCode, yearMonth));
     }
 }
