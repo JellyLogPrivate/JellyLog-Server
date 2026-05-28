@@ -97,11 +97,11 @@ public class AiReportService {
             String summary = root.path("summary").asText();
             JsonNode scores = root.path("scores");
             
-            int stability = scores.path("stability").asInt(50);
-            int activity = scores.path("activity").asInt(50);
-            int happiness = scores.path("happiness").asInt(50);
-            int stress = scores.path("stress").asInt(50);
-            int achievement = scores.path("achievement").asInt(50);
+            int stability = scores.path("stability").asInt(0);
+            int activity = scores.path("activity").asInt(0);
+            int happiness = scores.path("happiness").asInt(0);
+            int stress = scores.path("stress").asInt(0);
+            int achievement = scores.path("achievement").asInt(0);
 
             AiReport report = new AiReport(userCode, summary, yearMonthStr, stability, activity, happiness, stress, achievement);
             aiReportRepository.save(report);
