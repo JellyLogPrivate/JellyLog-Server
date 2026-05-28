@@ -40,6 +40,24 @@ public class Furniture {
     public Furniture() {
     }
 
+    public Furniture(String furnitureName, String furnitureImage, Long furniturePrice, String furnitureGroup) {
+        this.furnitureName = furnitureName;
+        this.furnitureImage = furnitureImage;
+        this.furniturePrice = furniturePrice;
+        this.furnitureGroup = furnitureGroup;
+    }
+
+    public static Furniture create(String furnitureName, String furnitureImage, Long furniturePrice, String furnitureGroup) {
+        return new Furniture(furnitureName, furnitureImage, furniturePrice, furnitureGroup);
+    }
+
+    public void updateInfo(String furnitureName, String furnitureImage, Long furniturePrice, String furnitureGroup) {
+        this.furnitureName = furnitureName;
+        this.furnitureImage = furnitureImage;
+        this.furniturePrice = furniturePrice;
+        this.furnitureGroup = furnitureGroup;
+    }
+
     public Long getFurnitureCode() {
         return furnitureCode;
     }

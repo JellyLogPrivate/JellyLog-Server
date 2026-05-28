@@ -4,6 +4,6 @@ public record FurnitureCreateRequest(
     String furnitureName,
     String furnitureImage,
     Long furniturePrice,
-    Long furnitureGroup
+    String furnitureGroup
 ) {
 }
