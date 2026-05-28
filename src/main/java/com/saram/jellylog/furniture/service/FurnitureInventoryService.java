@@ -21,8 +21,8 @@ public class FurnitureInventoryService {
     private final FurnitureRepository furnitureRepository;
 
     public FurnitureInventoryService(
-        UserFurnitureRepository userFurnitureRepository,
-        FurnitureRepository furnitureRepository
+            UserFurnitureRepository userFurnitureRepository,
+            FurnitureRepository furnitureRepository
     ) {
         this.userFurnitureRepository = userFurnitureRepository;
         this.furnitureRepository = furnitureRepository;
@@ -36,36 +36,38 @@ public class FurnitureInventoryService {
     @Transactional(readOnly = true)
     public UserFurnitureResponse getUserFurnitureItem(Long userCode, Long furnitureCode) {
         UserFurniture userFurniture = userFurnitureRepository
-            .findByUserCodeAndFurnitureCode(userCode, furnitureCode)
-            .orElseThrow(() -> new NotFoundException("Furniture inventory item not found."));
+                .findByUserCodeAndFurnitureCode(userCode, furnitureCode)
+                .orElseThrow(() -> new NotFoundException("Furniture inventory item not found."));
         return toResponse(userFurniture);
     }
 
     public UserFurnitureResponse createUserFurniture(Long userCode, UserFurnitureCreateRequest request) {
         validateFurnitureExists(request.furnitureCode());
 
-        if (userFurnitureRepository.existsByUserCodeAndFurnitureCode(request.userCode(), request.furnitureCode())) {
+        // ⭕ 변경: request.userCode() 대신 인증된 userCode 변수로 중복 체크를 수행합니다.
+        if (userFurnitureRepository.existsByUserCodeAndFurnitureCode(userCode, request.furnitureCode())) {
             throw new ConflictException("Furniture inventory item already exists.");
         }
 
+        // ⭕ 변경: 엔티티 저장 시에도 컨트롤러가 넘겨준 확실한 userCode를 바인딩합니다.
         UserFurniture userFurniture = UserFurniture.create(
-            request.userCode(),
-            request.furnitureCode(),
-            request.isPlaced(),
-            LocalDateTime.now()
+                userCode,
+                request.furnitureCode(),
+                request.isPlaced(),
+                LocalDateTime.now()
         );
 
         return toResponse(userFurnitureRepository.save(userFurniture));
     }
 
     public UserFurnitureResponse updateUserFurniture(
-        Long userCode,
-        Long furnitureCode,
-        UserFurnitureUpdateRequest request
+            Long userCode,
+            Long furnitureCode,
+            UserFurnitureUpdateRequest request
     ) {
         UserFurniture userFurniture = userFurnitureRepository
-            .findByUserCodeAndFurnitureCode(userCode, furnitureCode)
-            .orElseThrow(() -> new NotFoundException("Furniture inventory item not found."));
+                .findByUserCodeAndFurnitureCode(userCode, furnitureCode)
+                .orElseThrow(() -> new NotFoundException("Furniture inventory item not found."));
 
         userFurniture.updatePlaced(request.isPlaced(), LocalDateTime.now());
 
@@ -74,8 +76,8 @@ public class FurnitureInventoryService {
 
     public void deleteUserFurniture(Long userCode, Long furnitureCode) {
         UserFurniture userFurniture = userFurnitureRepository
-            .findByUserCodeAndFurnitureCode(userCode, furnitureCode)
-            .orElseThrow(() -> new NotFoundException("Furniture inventory item not found."));
+                .findByUserCodeAndFurnitureCode(userCode, furnitureCode)
+                .orElseThrow(() -> new NotFoundException("Furniture inventory item not found."));
         userFurnitureRepository.delete(userFurniture);
     }
 
@@ -87,12 +89,11 @@ public class FurnitureInventoryService {
 
     private UserFurnitureResponse toResponse(UserFurniture userFurniture) {
         return new UserFurnitureResponse(
-            userFurniture.getUserFurnitureCode(),
-            userFurniture.getUserCode(),
-            userFurniture.getFurnitureCode(),
-            userFurniture.getUserFurnitureIsPlaced(),
-            userFurniture.getUserFurnitureUpdatedAt()
+                userFurniture.getUserFurnitureCode(),
+                userFurniture.getUserCode(),
+                userFurniture.getFurnitureCode(),
+                userFurniture.getUserFurnitureIsPlaced(),
+                userFurniture.getUserFurnitureUpdatedAt()
         );
     }
 }
-

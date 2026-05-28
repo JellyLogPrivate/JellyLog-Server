@@ -7,15 +7,8 @@ import com.saram.jellylog.furniture.service.FurnitureInventoryService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/furnitures-inventory")
@@ -30,49 +23,54 @@ public class FurnitureInventoryController {
     // 사용자의 전체 가구 인벤토리 조회
     @GetMapping
     public ResponseEntity<List<UserFurnitureResponse>> getUserFurnitureInventory(
-            @AuthenticationPrincipal Long userCode
+            Authentication authentication
     ) {
+        // 🌟 로그 확인 결과 principal에 Long이 들어있음이 확인증되었습니다. 바로 캐스팅합니다!
+        Long userCode = (Long) authentication.getPrincipal();
         return ResponseEntity.ok(furnitureInventoryService.getUserFurnitureInventory(userCode));
     }
 
     // 인벤토리 내 특정 가구 단건 조회
     @GetMapping("/{furnitureCode}")
     public ResponseEntity<UserFurnitureResponse> getUserFurnitureItem(
-            @AuthenticationPrincipal Long userCode,
+            Authentication authentication,
             @PathVariable Long furnitureCode
     ) {
+        Long userCode = (Long) authentication.getPrincipal();
         return ResponseEntity.ok(furnitureInventoryService.getUserFurnitureItem(userCode, furnitureCode));
     }
 
-    // 인벤토리에 가구 추가 (구매 혹은 등록) - 누락되었던 인증 정보 추가
+    // 인벤토리에 가구 추가
     @PostMapping
     public ResponseEntity<UserFurnitureResponse> createUserFurniture(
-            @AuthenticationPrincipal Long userCode,
+            Authentication authentication,
             @RequestBody UserFurnitureCreateRequest request
     ) {
-        // 서비스 레이어의 메서드가 userCode를 함께 받도록 수정되어야 합니다.
+        Long userCode = (Long) authentication.getPrincipal();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(furnitureInventoryService.createUserFurniture(userCode, request));
     }
 
-    // 인벤토리 가구 상태 수정 (배치 여부 전환 등)
+    // 인벤토리 가구 상태 수정
     @PutMapping("/{furnitureCode}")
     public ResponseEntity<UserFurnitureResponse> updateUserFurniture(
-            @AuthenticationPrincipal Long userCode,
+            Authentication authentication,
             @PathVariable Long furnitureCode,
             @RequestBody UserFurnitureUpdateRequest request
     ) {
+        Long userCode = (Long) authentication.getPrincipal();
         return ResponseEntity.ok(
                 furnitureInventoryService.updateUserFurniture(userCode, furnitureCode, request)
         );
     }
 
-    // 인벤토리 가구 삭제 (소유권 해제 혹은 버리기)
+    // 인벤토리 가구 삭제
     @DeleteMapping("/{furnitureCode}")
     public ResponseEntity<Void> deleteUserFurniture(
-            @AuthenticationPrincipal Long userCode,
+            Authentication authentication,
             @PathVariable Long furnitureCode
     ) {
+        Long userCode = (Long) authentication.getPrincipal();
         furnitureInventoryService.deleteUserFurniture(userCode, furnitureCode);
         return ResponseEntity.noContent().build();
     }
