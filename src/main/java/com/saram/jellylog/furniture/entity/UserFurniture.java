@@ -32,6 +32,22 @@ public class UserFurniture {
     public UserFurniture() {
     }
 
+    public UserFurniture(Long userCode, Long furnitureCode, Boolean isPlaced, LocalDateTime updatedAt) {
+        this.userCode = userCode;
+        this.furnitureCode = furnitureCode;
+        this.userFurnitureIsPlaced = isPlaced;
+        this.userFurnitureUpdatedAt = updatedAt;
+    }
+
+    public static UserFurniture create(Long userCode, Long furnitureCode, Boolean isPlaced, LocalDateTime updatedAt) {
+        return new UserFurniture(userCode, furnitureCode, isPlaced, updatedAt);
+    }
+
+    public void updatePlaced(Boolean isPlaced, LocalDateTime updatedAt) {
+        this.userFurnitureIsPlaced = isPlaced;
+        this.userFurnitureUpdatedAt = updatedAt;
+    }
+
     public Long getUserFurnitureCode() {
         return userFurnitureCode;
     }

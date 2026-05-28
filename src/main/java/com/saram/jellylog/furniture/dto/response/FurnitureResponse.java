@@ -4,8 +4,8 @@ public record FurnitureResponse(
     Long furnitureCode,
     String furnitureName,
     String furnitureImage,
-    Long furniturePrice,
-    Long furnitureGroup
+    Integer furniturePrice,
+    Integer furnitureGroup
 
 ) {
 }
