@@ -30,13 +30,33 @@ public class AiReport {
     @Column(name = "report_year_month", nullable = false)
     private String yearMonth; // Format: "yyyy-MM"
 
+    @Column(name = "score_stability")
+    private Integer scoreStability;
+
+    @Column(name = "score_activity")
+    private Integer scoreActivity;
+
+    @Column(name = "score_happiness")
+    private Integer scoreHappiness;
+
+    @Column(name = "score_stress")
+    private Integer scoreStress;
+
+    @Column(name = "score_achievement")
+    private Integer scoreAchievement;
+
     @CreatedDate
     @Column(name = "report_created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    public AiReport(Long userCode, String content, String yearMonth) {
+    public AiReport(Long userCode, String content, String yearMonth, Integer stability, Integer activity, Integer happiness, Integer stress, Integer achievement) {
         this.userCode = userCode;
         this.content = content;
         this.yearMonth = yearMonth;
+        this.scoreStability = stability;
+        this.scoreActivity = activity;
+        this.scoreHappiness = happiness;
+        this.scoreStress = stress;
+        this.scoreAchievement = achievement;
     }
 }
