@@ -1,14 +1,16 @@
 package com.saram.jellylog.furniture.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
 
 @Entity
 @Table(name = "furniture_table")
+@Getter // 롬복이 자동으로 모든 Getter를 만들어줍니다.
+@Setter // 롬복이 자동으로 모든 Setter를 만들어줍니다.
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // 기본 생성자 자동 생성
 public class Furniture {
 
     @Id
@@ -23,10 +25,10 @@ public class Furniture {
     private String furnitureImage;
 
     @Column(name = "furniture_price")
-    private Long furniturePrice;
+    private Integer furniturePrice;
 
     @Column(name = "furniture_group")
-    private String furnitureGroup;
+    private Integer furnitureGroup;
 
     @Column(name = "furniture_position_x")
     private Integer furniturePositionX;
@@ -37,88 +39,24 @@ public class Furniture {
     @Column(name = "furniture_depth_index")
     private Integer furnitureDepthIndex;
 
-    public Furniture() {
-    }
-
-    public Furniture(String furnitureName, String furnitureImage, Long furniturePrice, String furnitureGroup) {
+    // 커스텀 생성자
+    public Furniture(String furnitureName, String furnitureImage, Integer furniturePrice, Integer furnitureGroup) {
         this.furnitureName = furnitureName;
         this.furnitureImage = furnitureImage;
         this.furniturePrice = furniturePrice;
         this.furnitureGroup = furnitureGroup;
     }
 
-    public static Furniture create(String furnitureName, String furnitureImage, Long furniturePrice, String furnitureGroup) {
+    public static Furniture create(String furnitureName, String furnitureImage, Integer furniturePrice, Integer furnitureGroup) {
         return new Furniture(furnitureName, furnitureImage, furniturePrice, furnitureGroup);
     }
 
-    public void updateInfo(String furnitureName, String furnitureImage, Long furniturePrice, String furnitureGroup) {
+    public void updateInfo(String furnitureName, String furnitureImage, Integer furniturePrice, Integer furnitureGroup) {
         this.furnitureName = furnitureName;
         this.furnitureImage = furnitureImage;
         this.furniturePrice = furniturePrice;
         this.furnitureGroup = furnitureGroup;
     }
 
-    public Long getFurnitureCode() {
-        return furnitureCode;
-    }
-
-    public void setFurnitureCode(Long furnitureCode) {
-        this.furnitureCode = furnitureCode;
-    }
-
-    public String getFurnitureName() {
-        return furnitureName;
-    }
-
-    public void setFurnitureName(String furnitureName) {
-        this.furnitureName = furnitureName;
-    }
-
-    public String getFurnitureImage() {
-        return furnitureImage;
-    }
-
-    public void setFurnitureImage(String furnitureImage) {
-        this.furnitureImage = furnitureImage;
-    }
-
-    public Long getFurniturePrice() {
-        return furniturePrice;
-    }
-
-    public void setFurniturePrice(Long furniturePrice) {
-        this.furniturePrice = furniturePrice;
-    }
-
-    public String getFurnitureGroup() {
-        return furnitureGroup;
-    }
-
-    public void setFurnitureGroup(String furnitureGroup) {
-        this.furnitureGroup = furnitureGroup;
-    }
-
-    public Integer getFurniturePositionX() {
-        return furniturePositionX;
-    }
-
-    public void setFurniturePositionX(Integer furniturePositionX) {
-        this.furniturePositionX = furniturePositionX;
-    }
-
-    public Integer getFurniturePositionY() {
-        return furniturePositionY;
-    }
-
-    public void setFurniturePositionY(Integer furniturePositionY) {
-        this.furniturePositionY = furniturePositionY;
-    }
-
-    public Integer getFurnitureDepthIndex() {
-        return furnitureDepthIndex;
-    }
-
-    public void setFurnitureDepthIndex(Integer furnitureDepthIndex) {
-        this.furnitureDepthIndex = furnitureDepthIndex;
-    }
+    // 아래에 있던 모든 public getXXX, setXXX 메서드는 지우셔도 됩니다!
 }

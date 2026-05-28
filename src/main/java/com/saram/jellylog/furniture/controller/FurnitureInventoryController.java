@@ -25,7 +25,6 @@ public class FurnitureInventoryController {
     public ResponseEntity<List<UserFurnitureResponse>> getUserFurnitureInventory(
             Authentication authentication
     ) {
-        // 🌟 로그 확인 결과 principal에 Long이 들어있음이 확인증되었습니다. 바로 캐스팅합니다!
         Long userCode = (Long) authentication.getPrincipal();
         return ResponseEntity.ok(furnitureInventoryService.getUserFurnitureInventory(userCode));
     }
