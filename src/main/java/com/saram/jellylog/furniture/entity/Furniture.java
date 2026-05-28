@@ -8,9 +8,9 @@ import lombok.AccessLevel;
 
 @Entity
 @Table(name = "furniture_table")
-@Getter // 롬복이 자동으로 모든 Getter를 만들어줍니다.
-@Setter // 롬복이 자동으로 모든 Setter를 만들어줍니다.
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // 기본 생성자 자동 생성
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Furniture {
 
     @Id
@@ -57,6 +57,4 @@ public class Furniture {
         this.furniturePrice = furniturePrice;
         this.furnitureGroup = furnitureGroup;
     }
-
-    // 아래에 있던 모든 public getXXX, setXXX 메서드는 지우셔도 됩니다!
 }
