@@ -32,16 +32,16 @@ public class FoodService {
     @Transactional(readOnly = true)
     public FoodResponse getFood(Long foodCode) {
         Food food = foodRepository.findById(foodCode)
-                .orElseThrow(() -> new NotFoundException("Food not found."));
+            .orElseThrow(() -> new NotFoundException("Food not found."));
         return toResponse(food);
     }
 
     public FoodResponse createFood(FoodCreateRequest request) {
         Food food = Food.create(
-                request.foodName(),
-                request.foodImage(),
-                request.foodPrice(),
-                request.foodExp()
+            request.foodName(),
+            request.foodImage(),
+            request.foodPrice(),
+            request.foodExp()
         );
         return toResponse(foodRepository.save(food));
     }
@@ -51,10 +51,10 @@ public class FoodService {
                 .orElseThrow(() -> new NotFoundException("Food not found."));
 
         food.updateInfo(
-                request.foodName(),
-                request.foodImage(),
-                request.foodPrice(),
-                request.foodExp()
+            request.foodName(),
+            request.foodImage(),
+            request.foodPrice(),
+            request.foodExp()
         );
 
         return toResponse(food);
@@ -69,11 +69,11 @@ public class FoodService {
 
     private FoodResponse toResponse(Food food) {
         return new FoodResponse(
-                food.getFoodCode(),
-                food.getFoodName(),
-                food.getFoodImage(),
-                food.getFoodPrice(),
-                food.getFoodExp()
+            food.getFoodCode(),
+            food.getFoodName(),
+            food.getFoodImage(),
+            food.getFoodPrice(),
+            food.getFoodExp()
         );
     }
 }

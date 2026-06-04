@@ -33,31 +33,31 @@ public class PointService {
     @Transactional(readOnly = true)
     public PointResponse getPoint(Long pointLogCode) {
         Point point = pointRepository.findById(pointLogCode)
-                .orElseThrow(() -> new NotFoundException("Point log not found."));
+            .orElseThrow(() -> new NotFoundException("Point log not found."));
         return toResponse(point);
     }
 
     @Transactional(readOnly = true)
     public List<PointResponse> getUserPoints(Long userCode) {
         Sort sort = Sort.by(
-                Sort.Order.desc("pointLogCreatedAt"),
-                Sort.Order.desc("pointLogCode")
+            Sort.Order.desc("pointLogCreatedAt"),
+            Sort.Order.desc("pointLogCode")
         );
 
         return pointRepository.findByUserCode(userCode, sort)
-                .stream()
-                .map(this::toResponse)
-                .toList();
+            .stream()
+            .map(this::toResponse)
+            .toList();
     }
 
     public PointResponse createPoint(PointRequest request) {
         validatePointAmount(request.pointLogPointAmount());
 
         Point point = Point.create(
-                request.userCode(),
-                request.pointLogPointAmount(),
-                request.pointLogReason(),
-                request.pointLogReasonType()
+            request.userCode(),
+            request.pointLogPointAmount(),
+            request.pointLogReason(),
+            request.pointLogReasonType()
         );
 
         return toResponse(pointRepository.save(point));
@@ -71,12 +71,12 @@ public class PointService {
 
     private PointResponse toResponse(Point point) {
         return new PointResponse(
-                point.getPointLogCode(),
-                point.getUserCode(),
-                point.getPointLogPointAmount(),
-                point.getPointLogReason(),
-                point.getPointLogReasonType(),
-                point.getPointLogCreatedAt()
+            point.getPointLogCode(),
+            point.getUserCode(),
+            point.getPointLogPointAmount(),
+            point.getPointLogReason(),
+            point.getPointLogReasonType(),
+            point.getPointLogCreatedAt()
         );
     }
 }

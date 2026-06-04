@@ -39,8 +39,8 @@ public class PetService {
     @Transactional(readOnly = true)
     public PetResponse getPet(Long petCode) {
         return PetResponse.from(
-                petRepository.findById(petCode)
-                        .orElseThrow(() -> new NotFoundException("Pet master not found."))
+            petRepository.findById(petCode)
+                .orElseThrow(() -> new NotFoundException("Pet master not found."))
         );
     }
 
@@ -62,7 +62,7 @@ public class PetService {
     @Transactional(readOnly = true)
     public UserPetResponse getUserPet(Long userCode, Long petCode) {
         UserPet userPet = userPetRepository.findByIdUserCodeAndIdPetCode(userCode, petCode)
-                .orElseThrow(() -> new NotFoundException("User pet not found."));
+            .orElseThrow(() -> new NotFoundException("User pet not found."));
         return UserPetResponse.from(userPet);
     }
 
@@ -70,15 +70,15 @@ public class PetService {
     @Transactional(readOnly = true)
     public List<UserPetResponse> getUserPets(Long userCode) {
         return userPetRepository.findByIdUserCode(userCode)
-                .stream()
-                .map(UserPetResponse::from)
-                .toList();
+            .stream()
+            .map(UserPetResponse::from)
+            .toList();
     }
 
     // 기존 사용자-반려동물 관계의 변경 가능한 필드(레벨/경험치/감정)를 업데이트
     public UserPetResponse updateUserPet(Long userCode, Long petCode, UserPetUpdateRequest request) {
         UserPet userPet = userPetRepository.findByIdUserCodeAndIdPetCode(userCode, petCode)
-                .orElseThrow(() -> new NotFoundException("User pet not found."));
+            .orElseThrow(() -> new NotFoundException("User pet not found."));
 
         userPet.updateStatus(request.level(), request.exp(), request.emotion());
 
