@@ -26,7 +26,7 @@ public class FurnitureService {
     }
 
     @Transactional(readOnly = true)
-    public FurnitureResponse getFurniture(Long furnitureCode, Long code) {
+    public FurnitureResponse getFurniture(Long code,Long furnitureCode) {
         Furniture furniture = furnitureRepository.findById(furnitureCode)
             .orElseThrow(() -> new NotFoundException("Furniture not found."));
         return toResponse(furniture);
@@ -42,7 +42,7 @@ public class FurnitureService {
         return toResponse(furnitureRepository.save(furniture));
     }
 
-    public FurnitureResponse updateFurniture(Long furnitureCode, Long code, FurnitureUpdateRequest request) {
+    public FurnitureResponse updateFurniture(Long code,Long furnitureCode, FurnitureUpdateRequest request) {
         Furniture furniture = furnitureRepository.findById(furnitureCode)
             .orElseThrow(() -> new NotFoundException("Furniture not found."));
 
@@ -56,7 +56,7 @@ public class FurnitureService {
         return toResponse(furniture);
     }
 
-    public void deleteFurniture(Long furnitureCode, Long code) {
+    public void deleteFurniture(Long code,Long furnitureCode) {
         if (!furnitureRepository.existsById(furnitureCode)) {
             throw new NotFoundException("Furniture not found.");
         }
