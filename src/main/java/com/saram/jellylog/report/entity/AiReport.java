@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -45,9 +47,13 @@ public class AiReport {
     @Column(name = "score_achievement")
     private Integer scoreAchievement;
 
-    @CreatedDate
+    @CreationTimestamp
     @Column(name = "report_created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "report_updated_at", updatable = false)
+    private LocalDateTime updatedAt;
 
     public AiReport(Long userCode, String content, String yearMonth, Integer stability, Integer activity, Integer happiness, Integer stress, Integer achievement) {
         this.userCode = userCode;

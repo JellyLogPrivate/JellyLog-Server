@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 @RestController
@@ -26,7 +28,7 @@ public class AiReportController {
             @AuthenticationPrincipal Long userCode,
             @RequestParam(required = false) String yearMonth) {
         if (yearMonth == null || yearMonth.isEmpty()) {
-            yearMonth = java.time.YearMonth.now().toString();
+            yearMonth = LocalDate.now().toString();
         }
         return ApiResponse.success(aiReportService.generateMonthlyReport(userCode, yearMonth));
     }
