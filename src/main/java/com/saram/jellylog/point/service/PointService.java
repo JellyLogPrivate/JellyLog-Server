@@ -7,6 +7,8 @@ import com.saram.jellylog.point.dto.PointResponse;
 import com.saram.jellylog.point.entity.Point;
 import com.saram.jellylog.point.repository.PointRepository;
 import java.util.List;
+import org.springframework.data.domain.Page; // 추가
+import org.springframework.data.domain.Pageable; // 추가
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,39 +23,41 @@ public class PointService {
         this.pointRepository = pointRepository;
     }
 
+    // 변경된 구간: 전체 포인트 로그 조회를 페이징 처리
     @Transactional(readOnly = true)
-    public List<PointResponse> getPoints() {
-        return pointRepository.findAll().stream().map(this::toResponse).toList();
+    public Page<PointResponse> getPoints(Pageable pageable) {
+        return pointRepository.findAll(pageable)
+                .map(this::toResponse);
     }
 
     @Transactional(readOnly = true)
     public PointResponse getPoint(Long pointLogCode) {
         Point point = pointRepository.findById(pointLogCode)
-            .orElseThrow(() -> new NotFoundException("Point log not found."));
+                .orElseThrow(() -> new NotFoundException("Point log not found."));
         return toResponse(point);
     }
 
     @Transactional(readOnly = true)
     public List<PointResponse> getUserPoints(Long userCode) {
         Sort sort = Sort.by(
-            Sort.Order.desc("pointLogCreatedAt"),
-            Sort.Order.desc("pointLogCode")
+                Sort.Order.desc("pointLogCreatedAt"),
+                Sort.Order.desc("pointLogCode")
         );
 
         return pointRepository.findByUserCode(userCode, sort)
-            .stream()
-            .map(this::toResponse)
-            .toList();
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
     public PointResponse createPoint(PointRequest request) {
         validatePointAmount(request.pointLogPointAmount());
 
         Point point = Point.create(
-            request.userCode(),
-            request.pointLogPointAmount(),
-            request.pointLogReason(),
-            request.pointLogReasonType()
+                request.userCode(),
+                request.pointLogPointAmount(),
+                request.pointLogReason(),
+                request.pointLogReasonType()
         );
 
         return toResponse(pointRepository.save(point));
@@ -67,13 +71,12 @@ public class PointService {
 
     private PointResponse toResponse(Point point) {
         return new PointResponse(
-            point.getPointLogCode(),
-            point.getUserCode(),
-            point.getPointLogPointAmount(),
-            point.getPointLogReason(),
-            point.getPointLogReasonType(),
-            point.getPointLogCreatedAt()
+                point.getPointLogCode(),
+                point.getUserCode(),
+                point.getPointLogPointAmount(),
+                point.getPointLogReason(),
+                point.getPointLogReasonType(),
+                point.getPointLogCreatedAt()
         );
     }
 }
-

@@ -11,6 +11,8 @@ import com.saram.jellylog.pet.repository.UserPetRepository;
 import com.saram.jellylog.global.exception.ConflictException;
 import com.saram.jellylog.global.exception.NotFoundException;
 import java.util.List;
+import org.springframework.data.domain.Page; // 추가
+import org.springframework.data.domain.Pageable; // 추가
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,18 +28,19 @@ public class PetService {
         this.userPetRepository = userPetRepository;
     }
 
-    // 펫 마스터 전체 목록을 반환
+    // 변경된 구간 (Line 30): 펫 마스터 전체 목록을 페이징 처리하여 반환
     @Transactional(readOnly = true)
-    public List<PetResponse> getPets() {
-        return petRepository.findAll().stream().map(PetResponse::from).toList();
+    public Page<PetResponse> getPets(Pageable pageable) {
+        return petRepository.findAll(pageable)
+                .map(PetResponse::from);
     }
 
     // petCode에 해당하는 펫 마스터 한 건을 반환
     @Transactional(readOnly = true)
     public PetResponse getPet(Long petCode) {
         return PetResponse.from(
-            petRepository.findById(petCode)
-                .orElseThrow(() -> new NotFoundException("Pet master not found."))
+                petRepository.findById(petCode)
+                        .orElseThrow(() -> new NotFoundException("Pet master not found."))
         );
     }
 
@@ -59,7 +62,7 @@ public class PetService {
     @Transactional(readOnly = true)
     public UserPetResponse getUserPet(Long userCode, Long petCode) {
         UserPet userPet = userPetRepository.findByIdUserCodeAndIdPetCode(userCode, petCode)
-            .orElseThrow(() -> new NotFoundException("User pet not found."));
+                .orElseThrow(() -> new NotFoundException("User pet not found."));
         return UserPetResponse.from(userPet);
     }
 
@@ -67,15 +70,15 @@ public class PetService {
     @Transactional(readOnly = true)
     public List<UserPetResponse> getUserPets(Long userCode) {
         return userPetRepository.findByIdUserCode(userCode)
-            .stream()
-            .map(UserPetResponse::from)
-            .toList();
+                .stream()
+                .map(UserPetResponse::from)
+                .toList();
     }
 
     // 기존 사용자-반려동물 관계의 변경 가능한 필드(레벨/경험치/감정)를 업데이트
     public UserPetResponse updateUserPet(Long userCode, Long petCode, UserPetUpdateRequest request) {
         UserPet userPet = userPetRepository.findByIdUserCodeAndIdPetCode(userCode, petCode)
-            .orElseThrow(() -> new NotFoundException("User pet not found."));
+                .orElseThrow(() -> new NotFoundException("User pet not found."));
 
         userPet.updateStatus(request.level(), request.exp(), request.emotion());
 
@@ -87,6 +90,4 @@ public class PetService {
             throw new NotFoundException("Pet master not found.");
         }
     }
-
 }
-

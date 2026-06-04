@@ -6,9 +6,11 @@ import com.saram.jellylog.food.dto.response.FoodResponse;
 import com.saram.jellylog.food.entity.Food;
 import com.saram.jellylog.food.repository.FoodRepository;
 import com.saram.jellylog.global.exception.NotFoundException;
-import java.util.List;
+import org.springframework.data.domain.Page; // 추가
+import org.springframework.data.domain.Pageable; // 추가
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 // 음식 정보를 관리하는 서비스(음식의 CRUD)
 @Service
 @Transactional
@@ -20,37 +22,39 @@ public class FoodService {
         this.foodRepository = foodRepository;
     }
 
+    // 변경된 구간: 전체 조회를 페이징 처리
     @Transactional(readOnly = true)
-    public List<FoodResponse> getFoods() {
-        return foodRepository.findAll().stream().map(this::toResponse).toList();
+    public Page<FoodResponse> getFoods(Pageable pageable) {
+        return foodRepository.findAll(pageable)
+                .map(this::toResponse);
     }
 
     @Transactional(readOnly = true)
     public FoodResponse getFood(Long foodCode) {
         Food food = foodRepository.findById(foodCode)
-            .orElseThrow(() -> new NotFoundException("Food not found."));
+                .orElseThrow(() -> new NotFoundException("Food not found."));
         return toResponse(food);
     }
 
     public FoodResponse createFood(FoodCreateRequest request) {
         Food food = Food.create(
-            request.foodName(),
-            request.foodImage(),
-            request.foodPrice(),
-            request.foodExp()
+                request.foodName(),
+                request.foodImage(),
+                request.foodPrice(),
+                request.foodExp()
         );
         return toResponse(foodRepository.save(food));
     }
 
     public FoodResponse updateFood(Long foodCode, FoodUpdateRequest request) {
         Food food = foodRepository.findById(foodCode)
-            .orElseThrow(() -> new NotFoundException("Food not found."));
+                .orElseThrow(() -> new NotFoundException("Food not found."));
 
         food.updateInfo(
-            request.foodName(),
-            request.foodImage(),
-            request.foodPrice(),
-            request.foodExp()
+                request.foodName(),
+                request.foodImage(),
+                request.foodPrice(),
+                request.foodExp()
         );
 
         return toResponse(food);
@@ -65,12 +69,11 @@ public class FoodService {
 
     private FoodResponse toResponse(Food food) {
         return new FoodResponse(
-            food.getFoodCode(),
-            food.getFoodName(),
-            food.getFoodImage(),
-            food.getFoodPrice(),
-            food.getFoodExp()
+                food.getFoodCode(),
+                food.getFoodName(),
+                food.getFoodImage(),
+                food.getFoodPrice(),
+                food.getFoodExp()
         );
     }
 }
-
