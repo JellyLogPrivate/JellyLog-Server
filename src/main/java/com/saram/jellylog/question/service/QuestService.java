@@ -25,7 +25,7 @@ import java.util.UUID;
 public class QuestService {
     private final QuestRepository questRepository;
     private final AnswerRepository answerRepository;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
 
     @Value("${gemini.api.key}")
     private String apiKey;
