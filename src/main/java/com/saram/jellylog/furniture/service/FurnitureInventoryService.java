@@ -44,12 +44,12 @@ public class FurnitureInventoryService {
     public UserFurnitureResponse createUserFurniture(Long userCode, UserFurnitureCreateRequest request) {
         validateFurnitureExists(request.furnitureCode());
 
-        // ⭕ 변경: request.userCode() 대신 인증된 userCode 변수로 중복 체크를 수행합니다.
+
         if (userFurnitureRepository.existsByUserCodeAndFurnitureCode(userCode, request.furnitureCode())) {
             throw new ConflictException("Furniture inventory item already exists.");
         }
 
-        // ⭕ 변경: 엔티티 저장 시에도 컨트롤러가 넘겨준 확실한 userCode를 바인딩합니다.
+
         UserFurniture userFurniture = UserFurniture.create(
                 userCode,
                 request.furnitureCode(),
