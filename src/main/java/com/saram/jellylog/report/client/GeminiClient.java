@@ -17,7 +17,7 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class GeminiClient {
+public class GeminiClient implements AiClient {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
