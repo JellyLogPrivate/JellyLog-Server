@@ -28,7 +28,7 @@ public class AiReportController {
             @AuthenticationPrincipal Long userCode,
             @RequestParam(required = false) String yearMonth) {
         if (yearMonth == null || yearMonth.isEmpty()) {
-            yearMonth = LocalDate.now().toString();
+            yearMonth = YearMonth.now().toString();
         }
         return ApiResponse.success(aiReportService.generateMonthlyReport(userCode, yearMonth));
     }
