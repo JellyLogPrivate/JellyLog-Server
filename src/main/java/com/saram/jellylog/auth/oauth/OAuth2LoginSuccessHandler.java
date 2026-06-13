@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 import tools.jackson.databind.ObjectMapper;
 
 @RequiredArgsConstructor
@@ -44,9 +45,13 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         oAuth2AuthorizationRequestBasedOnCookieRepository
                 .removeAuthorizationRequestCookies(request, response);
 
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding("UTF-8");
-        objectMapper.writeValue(response.getWriter(), ApiResponse.success(loginResponse));
+        String deepLink = UriComponentsBuilder
+                .fromUriString("jellylog://auth")
+                .queryParam("userAccessToken", loginResponse.getUserAccessToken())
+                .queryParam("userRefreshToken", loginResponse.getUserRefreshToken())
+                .queryParam("userCode", loginResponse.getUserCode())
+                .build().toUriString();
+
+        response.sendRedirect(deepLink);
     }
 }
