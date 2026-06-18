@@ -7,8 +7,8 @@ import com.saram.jellylog.point.dto.PointResponse;
 import com.saram.jellylog.point.entity.Point;
 import com.saram.jellylog.point.repository.PointRepository;
 import java.util.List;
-import org.springframework.data.domain.Page; // 추가
-import org.springframework.data.domain.Pageable; // 추가
+import org.springframework.data.domain.Page; 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,6 @@ public class PointService {
         this.pointRepository = pointRepository;
     }
 
-    // 변경된 구간: 전체 포인트 로그 조회를 페이징 처리
     @Transactional(readOnly = true)
     public Page<PointResponse> getPoints(Pageable pageable) {
         return pointRepository.findAll(pageable)
