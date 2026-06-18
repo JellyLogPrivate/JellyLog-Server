@@ -28,14 +28,11 @@ public class PetService {
         this.userPetRepository = userPetRepository;
     }
 
-    // 변경된 구간 (Line 30): 펫 마스터 전체 목록을 페이징 처리하여 반환
     @Transactional(readOnly = true)
     public Page<PetResponse> getPets(Pageable pageable) {
         return petRepository.findAll(pageable)
                 .map(PetResponse::from);
     }
-
-    // petCode에 해당하는 펫 마스터 한 건을 반환
     @Transactional(readOnly = true)
     public PetResponse getPet(Long petCode) {
         return PetResponse.from(
@@ -44,7 +41,6 @@ public class PetService {
         );
     }
 
-    // 반려동물 대상이 존재하는지 확인 후 사용자-반려동물 관계를 생성
     public UserPetResponse createUserPet(UserPetCreateRequest request) {
         validatePetExists(request.petCode());
 
@@ -58,7 +54,6 @@ public class PetService {
         return UserPetResponse.from(userPetRepository.save(userPet));
     }
 
-    // 사용자 코드와 반려동물 코드를 사용하여 사용자-반려동물 관계를 반환
     @Transactional(readOnly = true)
     public UserPetResponse getUserPet(Long userCode, Long petCode) {
         UserPet userPet = userPetRepository.findByIdUserCodeAndIdPetCode(userCode, petCode)
@@ -66,7 +61,6 @@ public class PetService {
         return UserPetResponse.from(userPet);
     }
 
-    // 사용자가 소유한 모든 반려동물을 반환
     @Transactional(readOnly = true)
     public List<UserPetResponse> getUserPets(Long userCode) {
         return userPetRepository.findByIdUserCode(userCode)
@@ -75,7 +69,6 @@ public class PetService {
             .toList();
     }
 
-    // 기존 사용자-반려동물 관계의 변경 가능한 필드(레벨/경험치/감정)를 업데이트
     public UserPetResponse updateUserPet(Long userCode, Long petCode, UserPetUpdateRequest request) {
         UserPet userPet = userPetRepository.findByIdUserCodeAndIdPetCode(userCode, petCode)
             .orElseThrow(() -> new NotFoundException("User pet not found."));
