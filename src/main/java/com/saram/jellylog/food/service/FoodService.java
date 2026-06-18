@@ -6,12 +6,11 @@ import com.saram.jellylog.food.dto.response.FoodResponse;
 import com.saram.jellylog.food.entity.Food;
 import com.saram.jellylog.food.repository.FoodRepository;
 import com.saram.jellylog.global.exception.NotFoundException;
-import org.springframework.data.domain.Page; // 추가
-import org.springframework.data.domain.Pageable; // 추가
+import org.springframework.data.domain.Page; 
+import org.springframework.data.domain.Pageable; 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-// 음식 정보를 관리하는 서비스(음식의 CRUD)
 @Service
 @Transactional
 public class FoodService {
@@ -22,7 +21,6 @@ public class FoodService {
         this.foodRepository = foodRepository;
     }
 
-    // 변경된 구간: 전체 조회를 페이징 처리
     @Transactional(readOnly = true)
     public Page<FoodResponse> getFoods(Pageable pageable) {
         return foodRepository.findAll(pageable)
