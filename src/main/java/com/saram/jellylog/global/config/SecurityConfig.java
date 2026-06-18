@@ -43,7 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login", "/api/auth/refresh").permitAll()
                         .requestMatchers("/oauth2/authorization/google").permitAll()
                         .requestMatchers("/login/oauth2/code/google").permitAll()
-                        .requestMatchers("/question/**").permitAll()
+                        .requestMatchers("/api/quest/**").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
