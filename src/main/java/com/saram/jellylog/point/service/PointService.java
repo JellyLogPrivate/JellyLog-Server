@@ -7,6 +7,8 @@ import com.saram.jellylog.point.dto.PointResponse;
 import com.saram.jellylog.point.entity.Point;
 import com.saram.jellylog.point.repository.PointRepository;
 import java.util.List;
+import org.springframework.data.domain.Page; 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +24,9 @@ public class PointService {
     }
 
     @Transactional(readOnly = true)
-    public List<PointResponse> getPoints() {
-        return pointRepository.findAll().stream().map(this::toResponse).toList();
+    public Page<PointResponse> getPoints(Pageable pageable) {
+        return pointRepository.findAll(pageable)
+                .map(this::toResponse);
     }
 
     @Transactional(readOnly = true)
@@ -76,4 +79,3 @@ public class PointService {
         );
     }
 }
-

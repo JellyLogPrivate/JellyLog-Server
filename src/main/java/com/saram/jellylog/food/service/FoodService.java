@@ -6,10 +6,11 @@ import com.saram.jellylog.food.dto.response.FoodResponse;
 import com.saram.jellylog.food.entity.Food;
 import com.saram.jellylog.food.repository.FoodRepository;
 import com.saram.jellylog.global.exception.NotFoundException;
-import java.util.List;
+import org.springframework.data.domain.Page; 
+import org.springframework.data.domain.Pageable; 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-// 음식 정보를 관리하는 서비스(음식의 CRUD)
+
 @Service
 @Transactional
 public class FoodService {
@@ -21,8 +22,9 @@ public class FoodService {
     }
 
     @Transactional(readOnly = true)
-    public List<FoodResponse> getFoods() {
-        return foodRepository.findAll().stream().map(this::toResponse).toList();
+    public Page<FoodResponse> getFoods(Pageable pageable) {
+        return foodRepository.findAll(pageable)
+                .map(this::toResponse);
     }
 
     @Transactional(readOnly = true)
@@ -44,7 +46,7 @@ public class FoodService {
 
     public FoodResponse updateFood(Long foodCode, FoodUpdateRequest request) {
         Food food = foodRepository.findById(foodCode)
-            .orElseThrow(() -> new NotFoundException("Food not found."));
+                .orElseThrow(() -> new NotFoundException("Food not found."));
 
         food.updateInfo(
             request.foodName(),
@@ -73,4 +75,3 @@ public class FoodService {
         );
     }
 }
-
