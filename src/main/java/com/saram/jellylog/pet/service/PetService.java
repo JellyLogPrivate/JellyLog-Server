@@ -11,8 +11,8 @@ import com.saram.jellylog.pet.repository.UserPetRepository;
 import com.saram.jellylog.global.exception.ConflictException;
 import com.saram.jellylog.global.exception.NotFoundException;
 import java.util.List;
-import org.springframework.data.domain.Page; // 추가
-import org.springframework.data.domain.Pageable; // 추가
+import org.springframework.data.domain.Page; 
+import org.springframework.data.domain.Pageable; 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
