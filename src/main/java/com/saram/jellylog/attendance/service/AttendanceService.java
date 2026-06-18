@@ -6,8 +6,8 @@ import com.saram.jellylog.attendance.entity.Attendance;
 import com.saram.jellylog.attendance.repository.AttendanceRepository;
 import com.saram.jellylog.global.exception.NotFoundException;
 import java.util.List;
-import org.springframework.data.domain.Page; // 추가
-import org.springframework.data.domain.Pageable; // 추가
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +21,6 @@ public class AttendanceService {
     public AttendanceService(AttendanceRepository attendanceRepository) {
         this.attendanceRepository = attendanceRepository;
     }
-
-    // 변경된 구간: 전체 출석 조회를 페이징 처리
     @Transactional(readOnly = true)
     public Page<AttendanceResponse> getAttendances(Pageable pageable) {
         return attendanceRepository.findAll(pageable)
@@ -47,8 +45,6 @@ public class AttendanceService {
                 .map(this::toResponse)
                 .toList();
     }
-
-    // userCode 파라미터 추가
     public AttendanceResponse createAttendance(Long userCode, AttendanceCreateRequest request) {
         Attendance attendance = new Attendance();
         attendance.setUserCode(userCode);
