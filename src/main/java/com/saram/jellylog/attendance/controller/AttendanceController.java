@@ -4,6 +4,8 @@ import com.saram.jellylog.attendance.dto.request.AttendanceCreateRequest;
 import com.saram.jellylog.attendance.dto.response.AttendanceResponse;
 import com.saram.jellylog.attendance.service.AttendanceService;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,8 +28,8 @@ public class AttendanceController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AttendanceResponse>> getAttendances() {
-        return ResponseEntity.ok(attendanceService.getAttendances());
+    public ResponseEntity<Page<AttendanceResponse>> getAttendances(Pageable pageable) {
+        return ResponseEntity.ok(attendanceService.getAttendances(pageable));
     }
 
     @GetMapping("/me")

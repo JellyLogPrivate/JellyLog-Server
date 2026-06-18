@@ -4,6 +4,8 @@ import com.saram.jellylog.point.dto.PointRequest;
 import com.saram.jellylog.point.dto.PointResponse;
 import com.saram.jellylog.point.service.PointService;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,8 +27,8 @@ public class PointController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PointResponse>> getPoints() {
-        return ResponseEntity.ok(pointService.getPoints());
+    public ResponseEntity<Page<PointResponse>> getPoints(Pageable pageable) {
+        return ResponseEntity.ok(pointService.getPoints(pageable));
     }
 
     @GetMapping("/{pointLogCode}")
@@ -44,4 +46,3 @@ public class PointController {
         return ResponseEntity.status(HttpStatus.CREATED).body(pointService.createPoint(request));
     }
 }
-
