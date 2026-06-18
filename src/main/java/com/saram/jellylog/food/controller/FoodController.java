@@ -4,7 +4,8 @@ import com.saram.jellylog.food.dto.request.FoodCreateRequest;
 import com.saram.jellylog.food.dto.request.FoodUpdateRequest;
 import com.saram.jellylog.food.dto.response.FoodResponse;
 import com.saram.jellylog.food.service.FoodService;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,8 +28,8 @@ public class FoodController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FoodResponse>> getFoods() {
-        return ResponseEntity.ok(foodService.getFoods());
+    public ResponseEntity<Page<FoodResponse>> getFoods(Pageable pageable) {
+        return ResponseEntity.ok(foodService.getFoods(pageable));
     }
 
     @GetMapping("/{foodCode}")
@@ -55,4 +56,3 @@ public class FoodController {
         return ResponseEntity.noContent().build();
     }
 }
-

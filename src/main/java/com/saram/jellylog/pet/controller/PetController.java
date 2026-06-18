@@ -2,7 +2,8 @@ package com.saram.jellylog.pet.controller;
 
 import com.saram.jellylog.pet.dto.response.PetResponse;
 import com.saram.jellylog.pet.service.PetService;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,8 +22,8 @@ public class PetController {
 
     // 펫 마스터 전체 목록을 반환
     @GetMapping
-    public ResponseEntity<List<PetResponse>> getPets() {
-        return ResponseEntity.ok(petService.getPets());
+    public ResponseEntity<Page<PetResponse>> getPets(Pageable pageable) {
+        return ResponseEntity.ok(petService.getPets(pageable));
     }
 
     // petCode에 해당하는 펫 마스터 단건을 반환
@@ -31,4 +32,3 @@ public class PetController {
         return ResponseEntity.ok(petService.getPet(petCode));
     }
 }
-
